@@ -25,7 +25,7 @@ const Image = () => {
   const match = useMatch("(max-width: 768px)");
 
   const { data } = modalProps;
-  const { views, downloads, user, created_at, urls, filepath, exif } = image;
+  const { views, downloads, user, uploaded_date, urls, filepath, exif } = image;
 
   useEffect(() => {
     setLoading(true);
@@ -104,24 +104,13 @@ const Image = () => {
       </div>
 
       <div className={s.modal_footer}>
-        <div className={s.first_row}>
-          <div className={s.first_row_item}>
-            <h3>Views</h3>
-
-            <span>{faker.random.numeric()}</span>
-          </div>
-          <div className={s.first_row_item}>
-            <h3>Downloads</h3>
-
-            <span>{faker.random.numeric()}</span>
-          </div>
-        </div>
+        <div className={s.first_row}></div>
 
         <div className={s.second_row}>
           <div className={s.second_row_item}>
             <MdOutlineCalendarToday />
 
-            <div>Published on {dateFormat(faker.date.past())}</div>
+            <div>Published on {dateFormat(uploaded_date)}</div>
           </div>
         </div>
       </div>

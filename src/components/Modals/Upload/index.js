@@ -2,6 +2,8 @@ import React, { Component } from "react";
 
 import Box from "@mui/material/Box";
 
+import Demo from "./AppCrop";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -18,11 +20,7 @@ const style = {
 const Modaluplod = () => {
   return (
     <Box sx={style}>
-      <iframe
-        src='https://bungtemin.net/uplo'
-        width='90%'
-        height='100%'
-      ></iframe>
+      <Demo />
     </Box>
   );
 };

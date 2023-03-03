@@ -3,9 +3,10 @@ export const numberFormat = (num) => {
 };
 
 export const dateFormat = (date) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
+  return new Date(date).toLocaleDateString("id-ID", {
+    weekday: "long",
     year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 };

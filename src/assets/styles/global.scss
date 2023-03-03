@@ -1,0 +1,115 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif;
+  color: #1d1d1f;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  @media (min-width: 768px) {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+input {
+  border: none;
+  outline: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+main {
+  position: relative;
+}
+
+.disable {
+  overflow: hidden;
+}
+
+.selected {
+  color: #1d1d1f !important;
+  pointer-events: none;
+}
+
+.orientation {
+  background: rgb(228, 228, 228);
+  border: 1px solid rgb(177, 177, 177);
+  margin: 0 10px 0 0;
+
+  &__landscape {
+    width: 18px;
+    height: 12px;
+  }
+
+  &__portrait {
+    width: 12px;
+    height: 18px;
+  }
+
+  &__squarish {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.react-horizontal-scrolling-menu--item {
+  &:not(:last-child) {
+    margin-right: 24px;
+  }
+}
+
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.react-horizontal-scrolling-menu--scroll-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.image span {
+  width: 100%;
+}
+
+.lazy-load-image-background {
+  background-size: cover !important;
+  background-position: center;
+}
+
+.lazy-load-image-background.blur.lazy-load-image-loaded {
+  height: 100%;
+}
+
+.image .lazy-load-image-background {
+  height: 400px;
+}

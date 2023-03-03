@@ -1,0 +1,28 @@
+.tabs_wrapper {
+  background-color: #fff;
+  align-items: center;
+  position: sticky;
+  top: 60px;
+  z-index: 29;
+}
+
+.filters {
+  display: flex;
+  gap: 24px;
+}
+
+.filters_button {
+  color: #767676;
+  width: 35px;
+  height: 35px;
+  padding: 5px;
+
+  &:hover {
+    color: #1d1d1f;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}

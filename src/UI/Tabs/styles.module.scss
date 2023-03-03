@@ -1,0 +1,43 @@
+.tabs_outer {
+  background-color: #fff;
+  box-shadow: inset 0 -1px #d1d1d1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    padding: 0 12px;
+  }
+}
+
+.tabs_inner {
+  display: flex;
+  gap: 32px;
+}
+
+.tab {
+  font-weight: 400;
+  color: #767676;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 60px;
+  cursor: pointer;
+  transition: color .2s ease;
+
+  &:hover {
+    color: #1d1d1f;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.active {
+  color: #1d1d1f;
+  box-shadow: inset 0 -2px #1d1d1f;
+  pointer-events: none;
+}

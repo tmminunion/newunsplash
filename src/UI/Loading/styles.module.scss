@@ -1,0 +1,55 @@
+.linear_outer {
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.linear_inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.linear_inner:before {
+  content: '';
+  position: absolute;
+  height: 100%;
+  background-color: #1d1d1f;
+  animation: animationProgress 1.5s infinite ease-out;
+}
+
+@keyframes animationProgress {
+  0% {
+    left: -150%;
+    width: 100%;
+  }
+  100% {
+    left: 100%;
+    width: 20%;
+  }
+}
+
+.spinner {
+  border-radius: 50%;
+  border: 5px solid #ccc;
+  border-bottom-color: #767676;
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  animation: animationSpinner 1s linear infinite;
+}
+
+@keyframes animationSpinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

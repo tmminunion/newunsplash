@@ -1,0 +1,25 @@
+.navbar_outer {
+  color: #1d1d1f;
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 20px;
+  z-index: 30;
+
+  @media (max-width: 768px) {
+    padding: 0 12px;
+  }
+}
+
+.navbar_inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 60px;
+}
+
+.navbar_logo {
+  display: flex;
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import clsx from "clsx";
-
+import { faker } from "@faker-js/faker";
 import s from "./styles.module.scss";
 import { MdOutlineCalendarToday, MdPhotoCamera } from "react-icons/md";
 
@@ -14,7 +14,7 @@ import useMatch from "../../../hooks/useMatch";
 
 import DownloadImage from "../../../utils/DownloadImage";
 import { dateFormat } from "../../../utils/Helpers";
-
+faker.locale = "id_ID";
 const Image = () => {
   const { modalProps, modalRef, closeModal } = useAppContext();
   const [image, setImage] = useState({});
@@ -69,27 +69,25 @@ const Image = () => {
     <div className={s.modal}>
       <div className={s.modal_header}>
         <div className={s.user}>
-          <div className={s.photo}>
+          {/* <div className={s.photo}>
             <LazyLoadImage
-              src='https://images.unsplash.com/profile-1609545740442-928866556c38image?ixlib=rb-4.0.3&crop=faces&fit=crop&w=32&h=32'
+              src={faker.image.avatar()}
               alt='{user?.name}'
               effect='blur'
             />
           </div>
           <Link to={`/namauser`} onClick={closeModal}>
-            nama nya
-          </Link>
+            {faker.name.fullName()}
+          </Link> */}
         </div>
         <div className={s.download}>
           <a
-            href={urls?.raw}
+            href={filepath}
             download
             className={isDownloading ? s.disable_button : ""}
-            onClick={(e) =>
-              DownloadImage(e, user?.username, data?.id, setIsDownloading)
-            }
+            onClick={(e) => DownloadImage(e, setIsDownloading)}
           >
-            {isDownloading ? "Downloading" : "Download"}
+            {isDownloading ? "Sudah di copy" : "Copy Link Image"}
           </a>
         </div>
       </div>
@@ -110,12 +108,12 @@ const Image = () => {
           <div className={s.first_row_item}>
             <h3>Views</h3>
 
-            <span>wwqeqweqw</span>
+            <span>{faker.random.numeric()}</span>
           </div>
           <div className={s.first_row_item}>
             <h3>Downloads</h3>
 
-            <span>2312312312</span>
+            <span>{faker.random.numeric()}</span>
           </div>
         </div>
 
@@ -123,12 +121,7 @@ const Image = () => {
           <div className={s.second_row_item}>
             <MdOutlineCalendarToday />
 
-            <div>Published on {dateFormat("2023-02-28T10:48:27Z")}</div>
-          </div>
-
-          <div className={s.second_row_item}>
-            <MdPhotoCamera />
-            <div>jhbjb</div>
+            <div>Published on {dateFormat(faker.date.past())}</div>
           </div>
         </div>
       </div>

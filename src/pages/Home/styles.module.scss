@@ -55,13 +55,14 @@
 .header_content {
   display: grid;
   width: 60%;
+  justify-content: center;
 
   @media (max-width: 768px) {
     width: 100%;
   }
 
   h1 {
-    font-size: 46px;
+    font-size: 70px;
     font-weight: 700;
 
     @media (max-width: 768px) {
@@ -71,9 +72,10 @@
 
   p {
     font-size: 18px;
-    margin-top: 16px;
+    margin-top: 20px;
     margin-bottom: 24px;
-
+  justify-content: center;
+  text-align: center;
     @media (max-width: 768px) {
       font-size: 15px;
       margin-top: 8px;
@@ -81,7 +83,15 @@
     }
   }
 }
-
+.buttonnya{
+  background-color: blue;
+    color: white;
+    font-size: 25px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    margin: 10px 0px;
+    cursor: pointer;
+}
 .header_user {
   display: flex;
   gap: 5px;

@@ -12,6 +12,7 @@ const Home = () => {
   const [photoBy, setPhotoBy] = useState({});
   const [images, setImages] = useState([]);
   const { urls, description } = photoBy;
+  const [album, setAlbum] = useState([]);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

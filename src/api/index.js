@@ -24,16 +24,6 @@ export const getImage = (id) => {
 export const getImages = () => {
   return wrapper("get", `photos?client_id=${ACCESS_KEY}`);
 };
-export const getImageAPI = (id) => {
-  return axios
-    .get(`https://bungtemin.net/images/api/${id}`)
-    .then((response) => response.data);
-};
-export const getImagesAPI = () => {
-  return axios
-    .get("https://bungtemin.net/images/api")
-    .then((response) => response.data.image);
-};
 
 export const getSearchImages = (name, sort = "relevance", orientation) => {
   return wrapper(
@@ -73,4 +63,15 @@ export const getTopicImages = (slug) => {
 
 export const getSearchUsers = (name) => {
   return wrapper("get", `search/users?client_id=${ACCESS_KEY}&query=${name}`);
+};
+
+export const getImageAPI = (id) => {
+  return axios
+    .get(`https://api.bungtemin.net/images/photo/${id}`)
+    .then((response) => response.data);
+};
+export const getImagesAPI = () => {
+  return axios
+    .get("https://api.bungtemin.net/images/photo")
+    .then((response) => response.data);
 };

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import styled from "styled-components";
 import s from "./styles.module.scss";
 import Modal from "@mui/material/Modal";
 import { getBackgroundImage, getImagesAPI } from "../../api";
@@ -12,12 +11,9 @@ const Home = () => {
   const [photoBy, setPhotoBy] = useState({});
   const [images, setImages] = useState([]);
   const { urls, description } = photoBy;
-  const [album, setAlbum] = useState([]);
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   useEffect(() => {
     getBackgroundImage().then((res) => {
       setPhotoBy(res[0]);

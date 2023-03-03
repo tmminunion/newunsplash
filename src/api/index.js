@@ -17,14 +17,6 @@ export const getCollection = (id) => {
   return wrapper("get", `collections/${id}/photos?client_id=${ACCESS_KEY}`);
 };
 
-export const getImage = (id) => {
-  return wrapper("get", `photos/${id}?client_id=${ACCESS_KEY}`);
-};
-
-export const getImages = () => {
-  return wrapper("get", `photos?client_id=${ACCESS_KEY}`);
-};
-
 export const getSearchImages = (name, sort = "relevance", orientation) => {
   return wrapper(
     "get",
@@ -45,20 +37,12 @@ export const getUserInfo = (username) => {
   return wrapper("get", `users/${username}/?client_id=${ACCESS_KEY}`);
 };
 
-export const getUserImages = (username) => {
-  return wrapper("get", `users/mailchimp/photos?client_id=${ACCESS_KEY}`);
-};
-
 export const getTopics = () => {
   return wrapper("get", `topics?client_id=${ACCESS_KEY}`);
 };
 
 export const getTopic = (slug) => {
   return wrapper("get", `topics/${slug}?client_id=${ACCESS_KEY}`);
-};
-
-export const getTopicImages = (slug) => {
-  return wrapper("get", `topics/${slug}/photos?client_id=${ACCESS_KEY}`);
 };
 
 export const getSearchUsers = (name) => {

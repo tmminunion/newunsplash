@@ -12,7 +12,7 @@ import {
   AiOutlineTwitter,
 } from "react-icons/ai";
 
-import { getUserImages, getUserInfo } from "../../api";
+import { getImagesAPI, getUserInfo } from "../../api";
 import ImagesGrid from "../../components/ImagesGrid";
 import Dropdown from "../../UI/Dropdown";
 import { Spinner } from "../../UI/Loading";
@@ -75,7 +75,7 @@ const User = () => {
 
   useEffect(() => {
     setImagesLoading(true);
-    getUserImages(username)
+    getImagesAPI(username)
       .then((response) => {
         setImages(response);
       })
@@ -102,7 +102,7 @@ const User = () => {
   return (
     <PageTitle title={username ? `${username}` : "Loading"}>
       <div className={s.user_outer}>
-        <div className="container">
+        <div className='container'>
           <div className={s.user_inner}>
             <Spinner loading={userLoading}>
               <div className={s.user_image_wrapper}>

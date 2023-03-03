@@ -4,7 +4,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import s from "./styles.module.scss";
 
-import { getTopic, getTopicImages } from "../../api";
+import { getTopic, getImagesAPI } from "../../api";
 import ImagesGrid from "../../components/ImagesGrid";
 import { LinearProgress } from "../../UI/Loading";
 import RenderIf from "../../utils/RenderIf";
@@ -35,7 +35,7 @@ const Topic = () => {
 
   useEffect(() => {
     setImagesLoading(true);
-    getTopicImages(slug)
+    getImagesAPI(slug)
       .then((res) => {
         setTopicImages(res);
       })
@@ -55,7 +55,7 @@ const Topic = () => {
             <LazyLoadImage
               src={cover_photo?.urls?.full}
               alt={title}
-              effect="blur"
+              effect='blur'
               placeholderSrc={cover_photo?.urls?.small}
             />
           </RenderIf>

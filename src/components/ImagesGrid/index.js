@@ -30,7 +30,7 @@ const Image = memo(({ id, album_title, filepath, description }) => {
           className={s.user_wrapper}
           onClick={match ? () => {} : () => handleOpenModal(id)}
         >
-          <Link to={`/${album_title}`} onClick={(e) => e.stopPropagation()}>
+          <Link to={`/t/${album_title}`} onClick={(e) => e.stopPropagation()}>
             <div className={s.user_image}>
               <LazyLoadImage
                 src={faker.image.abstract(32, 32, true)}

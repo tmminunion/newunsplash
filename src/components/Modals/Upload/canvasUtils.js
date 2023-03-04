@@ -1,47 +1,6 @@
-var axios = require("axios");
+import estring from "../../../utils/idgenerator";
+import { Sendphoto } from "../../../api";
 
-export function SendImage(base64, width, height) {
-  const idnya = estring(27);
-  var data = JSON.stringify({
-    id: idnya,
-    album: 1,
-    data: base64,
-    width: width,
-    height: height,
-  });
-
-  var config = {
-    method: "post",
-    maxBodyLength: Infinity,
-    url: "https://bungtemin.net/images/add",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: data,
-  };
-
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      window.top.location.href = "https://gallery.bungtemin.net/";
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
-export const estring = (myLength) => {
-  const chars =
-    "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
-  const randomArray = Array.from(
-    {
-      length: myLength,
-    },
-    (v, k) => chars[Math.floor(Math.random() * chars.length)]
-  );
-
-  const randomString = randomArray.join("");
-  return Date.now() + randomString;
-};
 export const createImage = (url) =>
   new Promise((resolve, reject) => {
     const image = new Image();
@@ -76,6 +35,7 @@ export async function getCroppedImg(
   imageSrc,
   pixelCrop,
   rotation = 0,
+
   flip = { horizontal: false, vertical: false }
 ) {
   const image = await createImage(imageSrc);
@@ -126,9 +86,40 @@ export async function getCroppedImg(
 
   // As Base64 string
   // return canvas.toDataURL('image/jpeg');
-
+  var namanya = localStorage.getItem("namatit");
+  if (!namanya) {
+    var nameimage = "photo";
+    console.log("poto");
+  } else {
+    var nameimage = namanya;
+    console.log(nameimage);
+  }
   const base64 = canvas.toDataURL("image/jpeg");
-  SendImage(base64, canvas.width, canvas.height);
+  const idnya = estring(27);
+
+  var datanya = JSON.stringify({
+    id: idnya,
+    imgid: idnya,
+    album_id: 1,
+    album_title: nameimage,
+    filepath: `https://bungtemin.net/photo/img/${idnya}`,
+    width: canvas.width,
+    height: canvas.height,
+    uploaded_date: Date.now(),
+  });
+
+  var dataimg = JSON.stringify({
+    id: idnya,
+    filepath: base64,
+  });
+
+  Sendphoto("photo", datanya).then((response) => {
+    console.log("poto");
+  });
+
+  Sendphoto("media", dataimg).then((response) => {
+    window.location.href = "/";
+  });
   // As a blob
   return new Promise((resolve, reject) => {
     canvas.toBlob((file) => {

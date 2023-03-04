@@ -70,7 +70,7 @@ class ImgDialog extends React.Component {
                 color='inherit'
                 className={classes.flex}
               >
-                Cropped image
+                Sedang mengupload....
               </Typography>
             </Toolbar>
           </AppBar>

@@ -11,7 +11,7 @@ import Masonry from "../../UI/Masonry";
 import useMatch from "../../hooks/useMatch";
 import RenderIf from "../../utils/RenderIf";
 
-const Image = memo(({ id, album, filepath, description }) => {
+const Image = memo(({ id, album_title, filepath, description }) => {
   const { openModal, modalProps } = useAppContext();
   const match = useMatch("(max-width: 768px)");
   const isImageModal = modalProps.type === "imageModal";
@@ -30,7 +30,7 @@ const Image = memo(({ id, album, filepath, description }) => {
           className={s.user_wrapper}
           onClick={match ? () => {} : () => handleOpenModal(id)}
         >
-          <Link to={`/${album.title}`} onClick={(e) => e.stopPropagation()}>
+          <Link to={`/${album_title}`} onClick={(e) => e.stopPropagation()}>
             <div className={s.user_image}>
               <LazyLoadImage
                 src='https://images.unsplash.com/profile-1609545740442-928866556c38image?ixlib=rb-4.0.3&crop=faces&fit=crop&w=32&h=32'
@@ -40,7 +40,7 @@ const Image = memo(({ id, album, filepath, description }) => {
                 alt='nufat12344'
               />
             </div>
-            <h3>{album.title}</h3>
+            <h3>{album_title}</h3>
           </Link>
         </div>
       </RenderIf>

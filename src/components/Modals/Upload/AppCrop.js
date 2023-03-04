@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import ReactDOM from "react-dom";
+
 import Cropper from "react-easy-crop";
 import Slider from "@material-ui/core/Slider";
 import Button from "@material-ui/core/Button";
@@ -13,7 +13,8 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
+import { runfile } from "../../../tensor";
+import RenderIf from "../../../utils/RenderIf";
 
 const ORIENTATION_TO_ANGLE = {
   3: 180,
@@ -28,6 +29,7 @@ const Demo = ({ classes }) => {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
+  const [nameImage, setnameImage] = useState(null);
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -40,7 +42,7 @@ const Demo = ({ classes }) => {
         croppedAreaPixels,
         rotation
       );
-      console.log("donee", { croppedImage });
+
       setCroppedImage(croppedImage);
     } catch (e) {
       console.error(e);
@@ -49,11 +51,13 @@ const Demo = ({ classes }) => {
 
   const onClose = useCallback(() => {
     setCroppedImage(null);
+    setnameImage(null);
   }, []);
 
   const onFileChange = async (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      setnameImage(runfile(file));
       let imageDataUrl = await readFile(file);
 
       try {
@@ -195,14 +199,16 @@ const Demo = ({ classes }) => {
                 onChange={(e, rotation) => setRotation(rotation)}
               />
             </div>
-            <Button
-              onClick={showCroppedImage}
-              variant='contained'
-              color='primary'
-              classes={{ root: classes.cropButton }}
-            >
-              Show Result
-            </Button>
+            <RenderIf isTrue={nameImage}>
+              <Button
+                onClick={showCroppedImage}
+                variant='contained'
+                color='primary'
+                classes={{ root: classes.cropButton }}
+              >
+                Upload Photo
+              </Button>
+            </RenderIf>
           </div>
           <ImgDialog img={croppedImage} onClose={onClose} />
         </React.Fragment>

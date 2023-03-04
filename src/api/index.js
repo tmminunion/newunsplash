@@ -2,7 +2,9 @@ import axios from "axios";
 
 const ACCESS_KEY = "o8XokWkKZqJUPogocq58S9_73RF71wG2k11hWC5DIdc";
 axios.defaults.baseURL = "https://api.unsplash.com/";
-
+axios.defaults.headers.common = {
+  Authorization: `Basic ZGJqc29uVVNFUjpkYmpzb25VU0VS`,
+};
 const wrapper = (method, url, data) =>
   axios.request({ method, url, data }).then((response) => response.data);
 
@@ -51,11 +53,26 @@ export const getSearchUsers = (name) => {
 
 export const getImageAPI = (id) => {
   return axios
-    .get(`https://api.bungtemin.net/images/photo/${id}`)
+    .get(`https://img.bungtemin.net/photo/${id}`)
     .then((response) => response.data);
 };
 export const getImagesAPI = () => {
   return axios
-    .get("https://api.bungtemin.net/images/photo")
+    .get("https://img.bungtemin.net/photo?_sort=id&_order=desc")
     .then((response) => response.data);
 };
+
+export function Sendphoto(url, datanya) {
+  var config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `https://img.bungtemin.net/${url}`,
+    headers: {
+      Authorization: "Basic ZGJqc29uVVNFUjpkYmpzb25VU0VS",
+      "Content-Type": "application/json",
+    },
+    data: datanya,
+  };
+
+  return axios(config).then((response) => response.data);
+}

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import s from "./styles.module.scss";
 
 import { getCollection } from "../../api";
-import ImagesGrid from "../../components/ImagesGrid";
+import ImagesGrid from "../../components/ImgGrid";
 import PageTitle from "../../utils/PageTitle";
 
 const Collection = () => {
@@ -32,7 +32,7 @@ const Collection = () => {
             alt={backgroundImage?.description}
           />
         </div>
-        <div className="container">
+        <div className='container'>
           <div className={s.collection_name}>
             <h1>{name}</h1>
           </div>

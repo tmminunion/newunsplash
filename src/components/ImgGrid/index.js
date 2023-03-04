@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import clsx from "clsx";
-import { faker } from "@faker-js/faker";
+
 import s from "./styles.module.scss";
 
 import { useAppContext } from "../../context";
@@ -11,7 +11,7 @@ import Masonry from "../../UI/Masonry";
 import useMatch from "../../hooks/useMatch";
 import RenderIf from "../../utils/RenderIf";
 
-const Image = memo(({ id, album_title, filepath, description }) => {
+const Image = memo(({ id, user, urls, description }) => {
   const { openModal, modalProps } = useAppContext();
   const match = useMatch("(max-width: 768px)");
   const isImageModal = modalProps.type === "imageModal";
@@ -30,17 +30,17 @@ const Image = memo(({ id, album_title, filepath, description }) => {
           className={s.user_wrapper}
           onClick={match ? () => {} : () => handleOpenModal(id)}
         >
-          <Link to={`/t/${album_title}`} onClick={(e) => e.stopPropagation()}>
+          <Link to={`/${user.username}`} onClick={(e) => e.stopPropagation()}>
             <div className={s.user_image}>
               <LazyLoadImage
-                src={`https://bungtemin.net/photo/imgthumb/${id}`}
+                src={user.profile_image.small}
                 effect='blur'
                 width={32}
                 height={32}
-                alt='nufat12344'
+                alt={user.name}
               />
             </div>
-            <h3>{album_title}</h3>
+            <h3>{user.name}</h3>
           </Link>
         </div>
       </RenderIf>
@@ -50,10 +50,10 @@ const Image = memo(({ id, album_title, filepath, description }) => {
         className={`${s.image} image`}
       >
         <LazyLoadImage
-          src={filepath}
+          src={urls.regular}
           alt={description}
           effect='blur'
-          placeholderSrc={filepath}
+          placeholderSrc={urls.small}
         />
       </div>
     </div>

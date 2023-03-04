@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import s from "./styles.module.scss";
 import Modal from "@mui/material/Modal";
-import { getImagesAPI } from "../../api";
+import { getImagesAPI, getnumAPI } from "../../api";
 import ImagesGrid from "../../components/ImagesGrid";
 import PageTitle from "../../utils/PageTitle";
 import Modaluplod from "../../components/Modals/Upload";
 import { faker } from "@faker-js/faker";
-
+import Pagination from "@mui/material/Pagination";
 const Home = () => {
   const [images, setImages] = useState([]);
-
+  const [totimages, totsetImages] = useState(10);
   const [open, setOpen] = React.useState(false);
+  const [page, setPage] = React.useState(1);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -19,6 +21,12 @@ const Home = () => {
     getImagesAPI(1).then((response) => {
       setImages(response);
       localStorage.setItem("bgimage", response[0].filepath);
+    });
+    getnumAPI(1).then((response) => {
+      var totalItems = response["x-total-count"];
+      var totalPages = Math.ceil(totalItems / 30);
+      totsetImages(totalPages);
+      setPage(1);
     });
 
     return () => setImages([]);
@@ -31,6 +39,11 @@ const Home = () => {
       return faker.image.abstract();
     }
   })();
+  const handleChangePage = (event, newPage) => {
+    getImagesAPI(newPage).then((response) => {
+      setImages(response);
+    });
+  };
   return (
     <PageTitle title='Home'>
       <div className={s.header_outer}>
@@ -66,6 +79,20 @@ const Home = () => {
       </div>
 
       <ImagesGrid images={images} />
+      <div className={s.user_outer}>
+        <div className='container'>
+          <div className={s.user_inner}>
+            {" "}
+            <Pagination
+              count={totimages}
+              variant='outlined'
+              shape='rounded'
+              page={page}
+              onChange={handleChangePage}
+            />
+          </div>
+        </div>
+      </div>
     </PageTitle>
   );
 };

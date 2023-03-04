@@ -49,6 +49,13 @@ export const getImageAPI = (id) => {
     .get(`https://img.bungtemin.net/photo/${id}`)
     .then((response) => response.data);
 };
+export const getCARI = (slug, id) => {
+  return axios
+    .get(
+      `https://img.bungtemin.net/photo?q=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`
+    )
+    .then((response) => response);
+};
 export const getbyALBUM = (slug, id) => {
   return axios
     .get(
@@ -62,6 +69,14 @@ export const getImagesAPI = (id) => {
       `https://img.bungtemin.net/photo?_page=${id}&_limit=30&_sort=id&_order=desc`
     )
     .then((response) => response.data);
+};
+
+export const getnumAPI = (id) => {
+  return axios
+    .get(
+      `https://img.bungtemin.net/photo?_page=${id}&_limit=30&_sort=id&_order=desc`
+    )
+    .then((response) => response.headers);
 };
 export const getcatAPI = (id) => {
   return axios

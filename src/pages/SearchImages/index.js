@@ -5,7 +5,7 @@ import s from "./styles.module.scss";
 import { MdCheck, MdTune } from "react-icons/md";
 
 import { useAppContext } from "../../context";
-import { getSearchImages } from "../../api";
+import { getCARI } from "../../api";
 import ImagesGrid from "../../components/ImagesGrid";
 import Tabs from "../../UI/Tabs";
 import Dropdown from "../../UI/Dropdown";
@@ -33,9 +33,9 @@ const SearchImages = () => {
 
   useEffect(() => {
     setLoading(true);
-    getSearchImages(name, sort, orientation)
+    getCARI(name, sort)
       .then((response) => {
-        setImages(response.results);
+        setImages(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -46,7 +46,7 @@ const SearchImages = () => {
     return () => {
       setImages([]);
     };
-  }, [name, sort, orientation]);
+  }, [name, sort]);
 
   const handleOpenModal = () => {
     openModal({
@@ -58,7 +58,7 @@ const SearchImages = () => {
   return (
     <PageTitle title={`${name ? name : "Loading"}`}>
       <div className={s.tabs_wrapper}>
-        <Tabs name={name} tab="p">
+        <Tabs name={name} tab='p'>
           <RenderIf isTrue={match}>
             <div className={s.filters}>
               <Dropdown title={orientationTitle?.title}>

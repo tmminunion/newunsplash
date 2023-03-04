@@ -39,7 +39,7 @@ const Panel = memo(({ isOpenPanel, setIsOpenPanel }) => {
           <div className={s.panel_title}>
             <span>Recent Searches</span>
             <span>•</span>
-            <button type="button" onClick={handleClear}>
+            <button type='button' onClick={handleClear}>
               Clear
             </button>
           </div>
@@ -47,7 +47,7 @@ const Panel = memo(({ isOpenPanel, setIsOpenPanel }) => {
             {newRecent?.map((recent, i) => {
               return (
                 <button
-                  type="button"
+                  type='button'
                   key={i}
                   className={s.recent_button}
                   onClick={() => {
@@ -109,12 +109,12 @@ const Form = ({ isNavbarForm }) => {
           [s.navbar_form_inner]: isNavbarForm,
         })}
       >
-        <button type="submit" className={clsx(s.form_icon, s.search_icon)}>
+        <button type='submit' className={clsx(s.form_icon, s.search_icon)}>
           <AiOutlineSearch />
         </button>
         <input
-          type="text"
-          placeholder="Search free high-resolution photos"
+          type='text'
+          placeholder='Cari photo disini....'
           value={value}
           onChange={handleChange}
           onClick={handleOpenPanel}

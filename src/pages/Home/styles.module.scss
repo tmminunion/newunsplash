@@ -6,7 +6,24 @@
     padding: 0 12px;
   }
 }
+.user_outer {
+  padding: 60px 0;
+  box-shadow: inset 0 -2px #212122;
 
+  @media(max-width: 768px) {
+    padding: 40px 20px;
+  }
+}
+.user_inner {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+
+  @media(max-width: 768px) {
+    flex-direction: column;
+    gap: 25px
+  }
+}
 .header_inner {
   display: flex;
   flex-direction: column;

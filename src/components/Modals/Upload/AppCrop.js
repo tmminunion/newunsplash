@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-
 import Cropper from "react-easy-crop";
 import Slider from "@material-ui/core/Slider";
 import Button from "@material-ui/core/Button";
@@ -13,15 +12,53 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import { runfile } from "../../../tensor";
-import RenderIf from "../../../utils/RenderIf";
+import runfile from "../../../tensor";
+import { useDropzone } from "react-dropzone";
+import styled from "styled-components";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
 
+import Select from "@mui/material/Select";
+const getColor = (props) => {
+  if (props.isDragAccept) {
+    return "red";
+  }
+  if (props.isDragReject) {
+    return "#ff1744";
+  }
+  if (props.isFocused) {
+    return "#2196f3";
+  }
+  return "gold";
+};
+
+const Container = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  margin-top: 30px;
+  padding: 60px;
+  height: 400px;
+  border-width: 3px;
+  color: red;
+  border-radius: 4px;
+  border-color: ${(props) => getColor(props)};
+  border-style: dashed;
+  background-color: #c0c0c0;
+
+  outline: none;
+  transition: border 0.24s ease-in-out;
+`;
 const ORIENTATION_TO_ANGLE = {
   3: 180,
   6: 90,
   8: -90,
 };
-
+const fileTypes = ["JPEG", "PNG", "GIF"];
 const Demo = ({ classes }) => {
   const [imageSrc, setImageSrc] = React.useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -29,7 +66,8 @@ const Demo = ({ classes }) => {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
-  const [nameImage, setnameImage] = useState(null);
+  const [nameImage, setnameImage] = useState(false);
+  const [loadingnya, setloadingnya] = useState(false);
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -51,33 +89,70 @@ const Demo = ({ classes }) => {
 
   const onClose = useCallback(() => {
     setCroppedImage(null);
-    setnameImage(null);
+    setnameImage(false);
   }, []);
 
-  const onFileChange = async (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      setnameImage(runfile(file));
-      let imageDataUrl = await readFile(file);
+  const onFileChange = async (file) => {
+    //   const file = e.target.files[0];
+    const dodol = await runfile(file);
+    if (dodol) {
+      console.log("ready");
+      setnameImage(true);
+    } else console.log("note");
+    let imageDataUrl = await readFile(file);
 
-      try {
-        // apply rotation if needed
-        const orientation = await getOrientation(file);
-        const rotation = ORIENTATION_TO_ANGLE[orientation];
-        if (rotation) {
-          imageDataUrl = await getRotatedImage(imageDataUrl, rotation);
-        }
-      } catch (e) {
-        console.warn("failed to detect the orientation");
+    try {
+      // apply rotation if needed
+      const orientation = await getOrientation(file);
+      const rotation = ORIENTATION_TO_ANGLE[orientation];
+      if (rotation) {
+        imageDataUrl = await getRotatedImage(imageDataUrl, rotation);
       }
-
-      setImageSrc(imageDataUrl);
+    } catch (e) {
+      console.warn("failed to detect the orientation");
     }
+
+    setImageSrc(imageDataUrl);
   };
   const [aspectRatio, setAspectRatio] = useState(4 / 3);
   const onAspectRatioChange = (event) => {
     setAspectRatio(event.target.value);
   };
+  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
+    useDropzone({
+      accept: { "image/*": [] },
+      onDrop: (acceptedFiles) => {
+        setloadingnya(true);
+        acceptedFiles.map((file) => onFileChange(file));
+      },
+    });
+  const [progress, setProgress] = React.useState(0);
+  const [buffer, setBuffer] = React.useState(10);
+
+  const progressRef = React.useRef(() => {});
+  React.useEffect(() => {
+    progressRef.current = () => {
+      if (progress > 100) {
+        setProgress(0);
+        setBuffer(10);
+      } else {
+        const diff = Math.random() * 10;
+        const diff2 = Math.random() * 10;
+        setProgress(progress + diff);
+        setBuffer(progress + diff + diff2);
+      }
+    };
+  });
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      progressRef.current();
+    }, 500);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   return (
     <div>
@@ -96,82 +171,39 @@ const Demo = ({ classes }) => {
               onZoomChange={setZoom}
             />
           </div>{" "}
+          <Typography align='center'>
+            {localStorage.getItem("namatit")}
+          </Typography>
           <div className={classes.controls}>
             <div className={classes.sliderContainer}>
-              <FormControl component='fieldset'>
-                <RadioGroup
-                  row
-                  aria-label='position'
-                  name='position'
-                  defaultValue='top'
-                  onChange={onAspectRatioChange}
-                >
-                  <FormControlLabel
-                    value={1 / 1}
-                    control={<Radio color='primary' />}
-                    label='1:1'
-                    labelPlacement='bottom'
-                  />{" "}
-                  <FormControlLabel
-                    value={5 / 4}
-                    control={<Radio color='primary' />}
-                    label='5:4'
-                    labelPlacement='bottom'
-                  />{" "}
-                  <FormControlLabel
-                    value={4 / 3}
-                    control={<Radio color='primary' />}
-                    label='4:3'
-                    labelPlacement='bottom'
-                  />{" "}
-                  <FormControlLabel
-                    value={1.9 / 1}
-                    control={<Radio color='primary' />}
-                    label='1.9:1'
-                    labelPlacement='bottom'
-                  />{" "}
-                  <FormControlLabel
-                    value={9 / 16}
-                    control={<Radio color='primary' />}
-                    label='9:16'
-                    labelPlacement='bottom'
-                  />{" "}
-                  <FormControlLabel
-                    value={3 / 2}
-                    control={<Radio color='primary' />}
-                    label='3:2'
-                    labelPlacement='bottom'
-                  />{" "}
-                  <FormControlLabel
-                    value={5 / 3}
-                    control={<Radio color='primary' />}
-                    label='5:3'
-                    labelPlacement='bottom'
-                  />{" "}
-                  <FormControlLabel
-                    value={16 / 9}
-                    control={<Radio color='primary' />}
-                    label='16:9'
-                    labelPlacement='bottom'
-                  />{" "}
-                  <FormControlLabel
-                    value={3 / 1}
-                    control={<Radio color='primary' />}
-                    label='3:1'
-                    labelPlacement='bottom'
-                  />
-                </RadioGroup>
-              </FormControl>
-            </div>
-          </div>
-          <div className={classes.controls}>
-            <div className={classes.sliderContainer}>
-              <Typography
-                variant='overline'
-                classes={{ root: classes.sliderLabel }}
-              >
-                Zoom
-              </Typography>
+              <div>
+                <FormControl sx={{ m: 1, minWidth: 80 }}>
+                  <Select
+                    labelId='demo-simple-select-autowidth-label'
+                    id='demo-simple-select-autowidth'
+                    value={aspectRatio}
+                    onChange={onAspectRatioChange}
+                    autoWidth
+                    label='Age'
+                  >
+                    <MenuItem value={1 / 1}>1:1</MenuItem>
+                    <MenuItem value={1 / 2}>1:2</MenuItem>
+                    <MenuItem value={1 / 3}>1:3</MenuItem>
+                    <MenuItem value={2 / 1}>2:1</MenuItem>
+                    <MenuItem value={5 / 4}>5:4</MenuItem>
+                    <MenuItem value={3 / 4}>3:4</MenuItem>
+                    <MenuItem value={4 / 3}>4:3</MenuItem>
+                    <MenuItem value={1.9 / 1}>1.9:1</MenuItem>
+                    <MenuItem value={9 / 6}>9:6</MenuItem>
+                    <MenuItem value={3 / 2}>3:2</MenuItem>
+                    <MenuItem value={5 / 3}>5:3</MenuItem>
+                    <MenuItem value={3 / 5}>3:5</MenuItem>
+                    <MenuItem value={16 / 9}>16:9</MenuItem>
+                    <MenuItem value={3 / 1}>3:1</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
               <Slider
                 value={zoom}
                 min={1}
@@ -182,24 +214,8 @@ const Demo = ({ classes }) => {
                 onChange={(e, zoom) => setZoom(zoom)}
               />
             </div>
-            <div className={classes.sliderContainer}>
-              <Typography
-                variant='overline'
-                classes={{ root: classes.sliderLabel }}
-              >
-                Rotation
-              </Typography>
-              <Slider
-                value={rotation}
-                min={0}
-                max={360}
-                step={1}
-                aria-labelledby='Rotation'
-                classes={{ root: classes.slider }}
-                onChange={(e, rotation) => setRotation(rotation)}
-              />
-            </div>
-            <RenderIf isTrue={nameImage}>
+
+            {nameImage ? (
               <Button
                 onClick={showCroppedImage}
                 variant='contained'
@@ -208,12 +224,43 @@ const Demo = ({ classes }) => {
               >
                 Upload Photo
               </Button>
-            </RenderIf>
+            ) : null}
           </div>
           <ImgDialog img={croppedImage} onClose={onClose} />
         </React.Fragment>
       ) : (
-        <input type='file' onChange={onFileChange} accept='image/*' />
+        <>
+          <div className='App'>
+            <h1>Upload file</h1>
+            {/* <input type='file' onChange={onFileChange} accept='image/*' />
+
+            */}
+            {!loadingnya ? (
+              <div className='container'>
+                <Container
+                  {...getRootProps({ isFocused, isDragAccept, isDragReject })}
+                >
+                  <input {...getInputProps()} />
+                  <p>
+                    Drag 'n' drop file kesini, atau klik disini untuk upload
+                  </p>
+                </Container>
+              </div>
+            ) : (
+              <Box sx={{ width: "100%" }}>
+                <Typography align='center'>
+                  Sedang Menganalisa gambar ....
+                </Typography>
+                <p></p>
+                <LinearProgress
+                  variant='buffer'
+                  value={progress}
+                  valueBuffer={buffer}
+                />
+              </Box>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

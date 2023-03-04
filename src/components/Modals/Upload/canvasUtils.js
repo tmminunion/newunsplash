@@ -86,14 +86,15 @@ export async function getCroppedImg(
 
   // As Base64 string
   // return canvas.toDataURL('image/jpeg');
+
   var namanya = localStorage.getItem("namatit");
   if (!namanya) {
     var nameimage = "photo";
     console.log("poto");
   } else {
     var nameimage = namanya;
-    console.log(nameimage);
   }
+
   const base64 = canvas.toDataURL("image/jpeg");
   const idnya = estring(27);
 
@@ -113,13 +114,22 @@ export async function getCroppedImg(
     filepath: base64,
   });
 
-  Sendphoto("photo", datanya).then((response) => {
-    console.log("poto");
+  var datacate = JSON.stringify({
+    id: nameimage,
+    slug: nameimage,
+    title: nameimage,
   });
 
-  Sendphoto("media", dataimg).then((response) => {
-    window.location.href = "/";
+  Sendphoto("categori", datacate).then((response) => {
+    console.log(response);
   });
+  Sendphoto("photo", datanya).then((response) => {
+    Sendphoto("media", dataimg).then((response) => {
+      console.log("udah");
+      window.location.href = "/";
+    });
+  });
+
   // As a blob
   return new Promise((resolve, reject) => {
     canvas.toBlob((file) => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import clsx from "clsx";
 import { faker } from "@faker-js/faker";
@@ -8,7 +8,7 @@ import { MdOutlineCalendarToday, MdPhotoCamera } from "react-icons/md";
 
 import { useAppContext } from "../../../context";
 import { getImageAPI } from "../../../api";
-
+import { Link } from "react-router-dom";
 import { Spinner } from "../../../UI/Loading";
 import useMatch from "../../../hooks/useMatch";
 
@@ -25,7 +25,8 @@ const Image = () => {
   const match = useMatch("(max-width: 768px)");
 
   const { data } = modalProps;
-  const { views, downloads, user, uploaded_date, urls, filepath, exif } = image;
+  const { views, downloads, user, uploaded_date, urls, filepath, album_title } =
+    image;
 
   useEffect(() => {
     setLoading(true);
@@ -69,7 +70,7 @@ const Image = () => {
     <div className={s.modal}>
       <div className={s.modal_header}>
         <div className={s.user}>
-          {/* <div className={s.photo}>
+          <div className={s.photo}>
             <LazyLoadImage
               src={faker.image.avatar()}
               alt='{user?.name}'
@@ -77,8 +78,8 @@ const Image = () => {
             />
           </div>
           <Link to={`/namauser`} onClick={closeModal}>
-            {faker.name.fullName()}
-          </Link> */}
+            {album_title}
+          </Link>
         </div>
         <div className={s.download}>
           <a

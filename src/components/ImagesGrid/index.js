@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import clsx from "clsx";
-
+import { faker } from "@faker-js/faker";
 import s from "./styles.module.scss";
 
 import { useAppContext } from "../../context";
@@ -33,7 +33,7 @@ const Image = memo(({ id, album_title, filepath, description }) => {
           <Link to={`/${album_title}`} onClick={(e) => e.stopPropagation()}>
             <div className={s.user_image}>
               <LazyLoadImage
-                src='https://images.unsplash.com/profile-1609545740442-928866556c38image?ixlib=rb-4.0.3&crop=faces&fit=crop&w=32&h=32'
+                src={faker.image.abstract(32, 32, true)}
                 effect='blur'
                 width={32}
                 height={32}

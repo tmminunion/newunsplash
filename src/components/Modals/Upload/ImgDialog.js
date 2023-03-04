@@ -48,6 +48,7 @@ class ImgDialog extends React.Component {
 
   render() {
     const { classes } = this.props;
+
     return (
       <Dialog
         fullScreen

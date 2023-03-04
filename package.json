@@ -19,6 +19,8 @@
     "prettier": "^2.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-drag-drop-files": "^2.3.9",
+    "react-dropzone": "^14.2.3",
     "react-easy-crop": "^4.7.3",
     "react-horizontal-scrolling-menu": "^3.2.3",
     "react-icons": "^4.3.1",

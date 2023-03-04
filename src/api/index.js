@@ -8,13 +8,6 @@ axios.defaults.headers.common = {
 const wrapper = (method, url, data) =>
   axios.request({ method, url, data }).then((response) => response.data);
 
-export const getBackgroundImage = () => {
-  return wrapper(
-    "get",
-    `collections/1459961/photos?client_id=${ACCESS_KEY}&orientation=landscape&per_page=1`
-  );
-};
-
 export const getCollection = (id) => {
   return wrapper("get", `collections/${id}/photos?client_id=${ACCESS_KEY}`);
 };
@@ -56,12 +49,20 @@ export const getImageAPI = (id) => {
     .get(`https://img.bungtemin.net/photo/${id}`)
     .then((response) => response.data);
 };
-export const getImagesAPI = () => {
+export const getImagesAPI = (id) => {
   return axios
-    .get("https://img.bungtemin.net/photo?_sort=id&_order=desc")
+    .get(
+      `https://img.bungtemin.net/photo?_page=${id}&_limit=30&_sort=id&_order=desc`
+    )
     .then((response) => response.data);
 };
-
+export const getcatAPI = (id) => {
+  return axios
+    .get(
+      `https://img.bungtemin.net/categori?_page=1&_limit=20&_sort=id&_order=asc`
+    )
+    .then((response) => response.data);
+};
 export function Sendphoto(url, datanya) {
   var config = {
     method: "post",

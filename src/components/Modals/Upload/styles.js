@@ -8,6 +8,7 @@ export const styles = (theme) => ({
       height: 400,
     },
   },
+
   cropButton: {
     flexShrink: 0,
     marginLeft: 16,
@@ -27,6 +28,7 @@ export const styles = (theme) => ({
     flex: "1",
     alignItems: "center",
   },
+
   sliderLabel: {
     [theme.breakpoints.down("xs")]: {
       minWidth: 65,

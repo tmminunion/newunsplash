@@ -2,43 +2,44 @@ import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import s from "./styles.module.scss";
 import Modal from "@mui/material/Modal";
-import { getBackgroundImage, getImagesAPI } from "../../api";
+import { getImagesAPI } from "../../api";
 import ImagesGrid from "../../components/ImagesGrid";
 import PageTitle from "../../utils/PageTitle";
 import Modaluplod from "../../components/Modals/Upload";
+import { faker } from "@faker-js/faker";
 
 const Home = () => {
-  const [photoBy, setPhotoBy] = useState({});
   const [images, setImages] = useState([]);
-  const { urls, description } = photoBy;
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  useEffect(() => {
-    getBackgroundImage().then((res) => {
-      setPhotoBy(res[0]);
-    });
-
-    return () => setPhotoBy({});
-  }, []);
 
   useEffect(() => {
-    getImagesAPI().then((response) => {
+    getImagesAPI(1).then((response) => {
       setImages(response);
+      localStorage.setItem("bgimage", response[0].filepath);
     });
 
     return () => setImages([]);
   }, []);
 
+  const imgbg = (() => {
+    if (localStorage.getItem("bgimage")) {
+      return localStorage.getItem("bgimage");
+    } else {
+      return faker.image.abstract();
+    }
+  })();
   return (
     <PageTitle title='Home'>
       <div className={s.header_outer}>
         <div className={s.header_bg}>
           <LazyLoadImage
-            src={urls?.regular}
-            alt={description}
+            src={imgbg}
+            alt={faker.lorem.text()}
             effect='blur'
-            placeholderSrc={urls?.small}
+            placeholderSrc={imgbg}
           />
         </div>
 

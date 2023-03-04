@@ -5,7 +5,7 @@ import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import s from "./styles.module.scss";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 
-import { getTopics } from "../../api";
+import { getcatAPI } from "../../api";
 import clsx from "clsx";
 
 const LeftArrow = () => {
@@ -62,7 +62,7 @@ const Topics = () => {
 
   useEffect(() => {
     setLoading(true);
-    getTopics()
+    getcatAPI()
       .then((res) => {
         setTopics(res);
       })

@@ -10,16 +10,25 @@ import Topics from "../Topics";
 const Navbar = () => {
   return (
     <>
+      {" "}
       <div className={s.navbar_outer}>
-        <div className={s.navbar_inner}>
-          <Link to={"/"} className={s.navbar_logo}>
-            <Logo />
-          </Link>
-          <Form isNavbarForm={true} />
-        </div>
+        <div className={s.topnav}>
+          {" "}
+          <div className={s.navbar_inner}>
+            <Link to={"/"} className={s.navbar_logo}>
+              <Logo />
+            </Link>
+            <Form isNavbarForm={true} />{" "}
+            <div className={s.topnavright}>
+              <div class='float-right'>
+                <a href='#search'>Login</a>
+                <a href='#about'>Akun</a>
+              </div>
+            </div>
+          </div>
+        </div>{" "}
       </div>
-
-      <Topics />
+      <Topics />{" "}
     </>
   );
 };

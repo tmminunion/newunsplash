@@ -1,6 +1,6 @@
 .navbar_outer {
   color: #1d1d1f;
-  background-color: #fff;
+  background-color: #003679;
   position: sticky;
   top: 0;
   left: 0;
@@ -19,7 +19,51 @@
   gap: 10px;
   height: 60px;
 }
+.navbar_inner2 {
+  float: right;
+  display: inline;
+  align-items: center;
+  gap: 10px;
+  height: 60px;
+  width: auto;
+}
 
 .navbar_logo {
   display: flex;
+}
+.topnav {
+  // background-color: #ffbb38;
+  background-color: #003679;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* Right-aligned section inside the top navigation */
+.topnavright {
+  float: right;
+    display: block;
+    @media (max-width: 768px) {
+        display: none;
+      }
 }

@@ -7,74 +7,15 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { MdOutlineClose } from "react-icons/md";
 
 import { useAppContext } from "../../context";
-import useClickAway from "../../hooks/useClickAway";
-import useMatch from "../../hooks/useMatch";
+
 import RenderIf from "../../utils/RenderIf";
-
-const Panel = memo(({ isOpenPanel, setIsOpenPanel }) => {
-  const { recent, setRecent } = useAppContext();
-  const history = useNavigate();
-  const noDuplicates = [...new Set(recent)];
-  const newRecent = noDuplicates.slice(Math.max(noDuplicates.length - 5, 0));
-  const match = useMatch("(min-width: 768px)");
-
-  const handleClear = () => {
-    localStorage.removeItem("recent");
-    setRecent([]);
-  };
-
-  const handleClick = (value) => {
-    history(`/p/${value}/relevant`);
-    setIsOpenPanel(false);
-  };
-
-  return (
-    <RenderIf isTrue={match}>
-      <div
-        className={clsx(s.panel, {
-          [s.show]: isOpenPanel && newRecent.length,
-        })}
-      >
-        <div className={s.panel_items}>
-          <div className={s.panel_title}>
-            <span>Recent Searches</span>
-            <span>•</span>
-            <button type='button' onClick={handleClear}>
-              Clear
-            </button>
-          </div>
-          <div className={s.recent}>
-            {newRecent?.map((recent, i) => {
-              return (
-                <button
-                  type='button'
-                  key={i}
-                  className={s.recent_button}
-                  onClick={() => {
-                    handleClick(recent);
-                  }}
-                >
-                  {recent}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </RenderIf>
-  );
-});
 
 const Form = ({ isNavbarForm }) => {
   const { recent, setRecent } = useAppContext();
   const history = useNavigate();
   const [value, setValue] = useState("");
-  const [isOpenPanel, setIsOpenPanel] = useState(false);
-  const inputRef = useRef(null);
 
-  useClickAway(inputRef, () => {
-    setIsOpenPanel(false);
-  });
+  const inputRef = useRef(null);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -88,12 +29,7 @@ const Form = ({ isNavbarForm }) => {
         setRecent([...recent, value]);
       }
       history(`/p/${value}/relevant`);
-      setIsOpenPanel(false);
     }
-  };
-
-  const handleOpenPanel = () => {
-    setIsOpenPanel(true);
   };
 
   return (
@@ -117,7 +53,6 @@ const Form = ({ isNavbarForm }) => {
           placeholder='Cari photo disini....'
           value={value}
           onChange={handleChange}
-          onClick={handleOpenPanel}
           style={{ paddingRight: value ? 50 : 20 }}
         />
         <RenderIf isTrue={value}>
@@ -129,8 +64,6 @@ const Form = ({ isNavbarForm }) => {
           </button>
         </RenderIf>
       </div>
-
-      <Panel isOpenPanel={isOpenPanel} setIsOpenPanel={setIsOpenPanel} />
     </form>
   );
 };

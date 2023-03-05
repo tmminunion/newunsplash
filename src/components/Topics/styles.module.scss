@@ -1,5 +1,5 @@
 .topics_wrapper {
-  background-color: #fff;
+  background-color: #ffbb38;
   box-shadow: 0 4px 12px #00000014, 0 0 1px #0100001a;
   position: sticky;
   top: 60px;
@@ -20,14 +20,18 @@
   }
 
   a {
-    color: #767676;
+    color: #003679;
     display: flex;
     align-items: center;
+    font-size: medium;
+    padding: 3px;
     height: 55px;
     transition: color .2s ease;
 
     &:hover {
-      color: #1d1d1f;
+        color: rgb(0, 0, 16);
+        font-size: 17px;
+       
     }
   }
 }

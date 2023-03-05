@@ -108,24 +108,27 @@
   right: 0;
   width: 100%;
   padding: 8px 0;
-  z-index: 5;
+  z-index: 95;
 }
 
 .show {
   border: 1px solid #d1d1d1;
   display: block;
+  z-index: 95;
 }
 
 .panel_items {
   display: grid;
   gap: 10px;
   padding: 8px 16px;
+  z-index: 95;
 }
 
 .panel_title {
   display: flex;
   align-items: baseline;
   gap: 5px;
+  z-index: 95;
 
   span {
     font-weight: 500;

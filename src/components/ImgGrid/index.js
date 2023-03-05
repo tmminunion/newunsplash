@@ -18,7 +18,7 @@ const Image = memo(({ id, user, urls, description }) => {
 
   const handleOpenModal = (id) => {
     openModal({
-      type: "imageModal",
+      type: "UnsplashModal",
       data: { id: id },
     });
   };

@@ -6,6 +6,8 @@ import { MdOutlineClose } from "react-icons/md";
 
 import { useAppContext } from "../../context";
 import Image from "../../components/Modals/Image";
+import Upload from "../../components/Modals/Upload";
+import Unsplash from "../../components/Modals/Unsplash";
 import Filter from "../../components/Modals/Filter";
 import useClickAway from "../../hooks/useClickAway";
 import Portal from "../../utils/Portal";
@@ -13,6 +15,8 @@ import RenderIf from "../../utils/RenderIf";
 
 const Modals = {
   imageModal: <Image />,
+  UploadModal: <Upload />,
+  UnsplashModal: <Unsplash />,
   filterModal: <Filter />,
 };
 

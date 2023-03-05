@@ -3,10 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import s from "./styles.module.scss";
 import { MdCheck, MdTune } from "react-icons/md";
-
+import { faker } from "@faker-js/faker";
 import { useAppContext } from "../../context";
-import { getCARI } from "../../api";
-import ImagesGrid from "../../components/ImagesGrid";
+import { getCARI, getSearchImages } from "../../api";
+import ImagesGrid from "../../components/CommonGrid";
 import Tabs from "../../UI/Tabs";
 import Dropdown from "../../UI/Dropdown";
 import useMatch from "../../hooks/useMatch";
@@ -33,16 +33,49 @@ const SearchImages = () => {
 
   useEffect(() => {
     setLoading(true);
-    getCARI(name, sort)
+    var dataimg = [];
+
+    getCARI(name, sort).then((response) => {
+      for (let result of response.data) {
+        dataimg.push({
+          id: result.id,
+          imgid: result.imgid,
+          album_id: result.album_id,
+          album_title: result.album_title,
+          filepath: result.filepath,
+          height: result.height,
+          width: result.width,
+          uploaded_date: result.created_at,
+          type: "imageModal",
+        });
+      }
+    });
+    getSearchImages(name, sort, orientation)
       .then((response) => {
-        setImages(response.data);
+        for (let result of response.results) {
+          dataimg.push({
+            id: result.id,
+            imgid: result.id,
+            album_id: 1,
+            album_title: faker.word.adverb(),
+            filepath: result.urls.regular,
+            height: result.height,
+            width: result.width,
+            uploaded_date: result.created_at,
+            type: "UnsplashModal",
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
       })
       .finally(() => {
+        dataimg.sort((a, b) => 0.5 - Math.random());
+
+        setImages(dataimg);
         setLoading(false);
       });
+
     return () => {
       setImages([]);
     };

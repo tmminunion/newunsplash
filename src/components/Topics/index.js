@@ -64,6 +64,7 @@ const Topics = () => {
     setLoading(true);
     getcatAPI()
       .then((res) => {
+        res.sort((a, b) => 0.5 - Math.random());
         setTopics(res);
       })
       .catch((error) => {

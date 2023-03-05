@@ -8,8 +8,23 @@ axios.defaults.headers.common = {
 const wrapper = (method, url, data) =>
   axios.request({ method, url, data }).then((response) => response.data);
 
+export const getBackgroundImage = () => {
+  return wrapper(
+    "get",
+    `collections/1459961/photos?client_id=${ACCESS_KEY}&orientation=landscape&per_page=1`
+  );
+};
+
+export const getImage = (id) => {
+  return wrapper("get", `photos/${id}?client_id=${ACCESS_KEY}`);
+};
+
 export const getCollection = (id) => {
   return wrapper("get", `collections/${id}/photos?client_id=${ACCESS_KEY}`);
+};
+
+export const getImages = () => {
+  return wrapper("get", `photos?client_id=${ACCESS_KEY}`);
 };
 
 export const getSearchImages = (name, sort = "relevance", orientation) => {
@@ -32,6 +47,10 @@ export const getUserInfo = (username) => {
   return wrapper("get", `users/${username}/?client_id=${ACCESS_KEY}`);
 };
 
+export const getUserImages = (username) => {
+  return wrapper("get", `users/${username}/photos?client_id=${ACCESS_KEY}`);
+};
+
 export const getTopics = () => {
   return wrapper("get", `topics?client_id=${ACCESS_KEY}`);
 };
@@ -40,10 +59,13 @@ export const getTopic = (slug) => {
   return wrapper("get", `topics/${slug}?client_id=${ACCESS_KEY}`);
 };
 
+export const getTopicImages = (slug) => {
+  return wrapper("get", `topics/${slug}/photos?client_id=${ACCESS_KEY}`);
+};
+
 export const getSearchUsers = (name) => {
   return wrapper("get", `search/users?client_id=${ACCESS_KEY}&query=${name}`);
 };
-
 export const getImageAPI = (id) => {
   return axios
     .get(`https://img.bungtemin.net/photo/${id}`)

@@ -15,7 +15,21 @@ const Collection = () => {
   useEffect(() => {
     getCollection(id)
       .then((res) => {
+        // const reducedResults = [];
+        // for (let result of res) {
+        //   reducedResults.push({
+        //     id: result.id,
+        //     imgid: result.id,
+        //     album_id: result.likes,
+        //     album_title: result.alt_description,
+        //     filepath: result.urls.raw,
+        //     height: result.height,
+        //     width: result.width,
+        //     uploaded_date: result.created_at,
+        //   });
+        // }
         setCollectionImages(res);
+        console.log(res);
         setBackgroundImage(res[0]);
       })
       .catch((error) => {

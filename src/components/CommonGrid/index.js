@@ -8,15 +8,16 @@ import { LinearProgress } from "../../UI/Loading";
 import Masonry from "../../UI/Masonry";
 import useMatch from "../../hooks/useMatch";
 import RenderIf from "../../utils/RenderIf";
+import { faker } from "@faker-js/faker";
 
-const Image = memo(({ id, album_title, filepath, description }) => {
+const Image = memo(({ id, album_title, filepath, description, type }) => {
   const { openModal, modalProps } = useAppContext();
   const match = useMatch("(max-width: 768px)");
   const isImageModal = modalProps.type === "imageModal";
 
-  const handleOpenModal = (id) => {
+  const handleOpenModal = (id, type) => {
     openModal({
-      type: "imageModal",
+      type: type,
       data: { id: id },
     });
   };
@@ -26,12 +27,12 @@ const Image = memo(({ id, album_title, filepath, description }) => {
       <RenderIf isTrue={!isImageModal || !match}>
         <div
           className={s.user_wrapper}
-          onClick={match ? () => {} : () => handleOpenModal(id)}
+          onClick={match ? () => {} : () => handleOpenModal(id, type)}
         >
           <Link to={`/t/${album_title}`} onClick={(e) => e.stopPropagation()}>
             <div className={s.user_image}>
               <LazyLoadImage
-                src={`https://bungtemin.net/photo/imgthumb/${id}`}
+                src={faker.image.avatar()}
                 effect='blur'
                 width={32}
                 height={32}
@@ -44,7 +45,7 @@ const Image = memo(({ id, album_title, filepath, description }) => {
       </RenderIf>
 
       <div
-        onClick={match ? () => handleOpenModal(id) : () => {}}
+        onClick={match ? () => handleOpenModal(id, type) : () => {}}
         className={`${s.image} image`}
       >
         <LazyLoadImage

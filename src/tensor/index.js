@@ -1,10 +1,6 @@
 import "@tensorflow/tfjs";
 import * as mobileNet from "@tensorflow-models/mobilenet";
-import { Configuration, OpenAIApi } from "openai";
-const configuration = new Configuration({
-  apiKey: "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",
-});
-const openai = new OpenAIApi(configuration);
+import axios from "axios";
 
 export default async function runfile(file) {
   let img = new Image();
@@ -26,14 +22,32 @@ export default async function runfile(file) {
 
 export async function getTenses() {
   try {
-    const completion = await openai.createCompletion({
+    const apiKey = "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";
+    const data = {
       model: "text-davinci-003",
       prompt: generatePrompt(),
       temperature: 0.6,
-    });
-    const result = completion.data.choices[0].text;
-    localStorage.setItem("Description_Image", result);
-    console.log("deskripsi ", result);
+    };
+
+    axios
+      .post(
+        "https://api.openai.com/v1/engines/davinci-codex/completions",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+        }
+      )
+      .then((response) => {
+        const result = response.data.choices[0].text;
+        localStorage.setItem("Description_Image", result);
+        console.log("deskripsi ", result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   } catch (err) {
     console.log("KATA Eror : ", err);
   }

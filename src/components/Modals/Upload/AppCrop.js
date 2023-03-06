@@ -8,18 +8,13 @@ import { getOrientation } from "get-orientation/browser";
 import ImgDialog from "./ImgDialog";
 import { getCroppedImg, getRotatedImage } from "./canvasUtils";
 import { styles } from "./styles";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import runfile, { getTenses } from "../../../tensor";
+import runfile from "../../../tensor";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-
 import Select from "@mui/material/Select";
 const getColor = (props) => {
   if (props.isDragAccept) {
@@ -97,7 +92,7 @@ const Demo = ({ classes }) => {
     const dodol = await runfile(file);
     if (dodol) {
       console.log("ready gambar");
-      getTenses();
+
       setnameImage(true);
     } else console.log("note");
     let imageDataUrl = await readFile(file);
@@ -154,7 +149,10 @@ const Demo = ({ classes }) => {
       clearInterval(timer);
     };
   }, []);
-
+  const hadleskip = (event) => {
+    setloadingnya(false);
+    setnameImage(true);
+  };
   return (
     <div>
       {imageSrc ? (
@@ -250,7 +248,8 @@ const Demo = ({ classes }) => {
             ) : (
               <Box sx={{ width: "100%" }}>
                 <Typography align='center'>
-                  Sedang Menganalisa gambar ....
+                  <p>Disini Kami Menganalisa Gambar dengan Kecerdasan Buatan</p>
+                  <p>Sedang Menganalisa gambar ....</p>
                 </Typography>
                 <p></p>
                 <LinearProgress

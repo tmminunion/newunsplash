@@ -95,6 +95,14 @@ export async function getCroppedImg(
     var nameimage = namanya;
   }
 
+  var Description_Image = localStorage.getItem("Description_Image");
+  if (!Description_Image) {
+    var Description_Image = "photo upload to gallery";
+    console.log("poto");
+  } else {
+    var Description_Image = Description_Image;
+  }
+
   const base64 = canvas.toDataURL("image/jpeg");
   const idnya = estring(27);
 
@@ -103,7 +111,9 @@ export async function getCroppedImg(
     imgid: idnya,
     album_id: 1,
     album_title: nameimage,
+    Description_Image: Description_Image,
     filepath: `https://bungtemin.net/photo/img/${idnya}`,
+    imgthumb: `https://bungtemin.net/photo/imgthumb/${idnya}/100/100`,
     width: canvas.width,
     height: canvas.height,
     uploaded_date: Date.now(),

@@ -96,7 +96,7 @@ const Demo = ({ classes }) => {
     //   const file = e.target.files[0];
     const dodol = await runfile(file);
     if (dodol) {
-      console.log("ready");
+      console.log("ready gambar");
       getTenses();
       setnameImage(true);
     } else console.log("note");

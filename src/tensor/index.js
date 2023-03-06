@@ -7,7 +7,6 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export default async function runfile(file) {
-  // getTenses("Kamu sedang belajar AI");
   let img = new Image();
   img.src = URL.createObjectURL(file);
   await img.decode();

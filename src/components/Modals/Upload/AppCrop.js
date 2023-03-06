@@ -12,7 +12,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import runfile from "../../../tensor";
+import runfile, { getTenses } from "../../../tensor";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import Box from "@mui/material/Box";
@@ -97,6 +97,7 @@ const Demo = ({ classes }) => {
     const dodol = await runfile(file);
     if (dodol) {
       console.log("ready");
+      getTenses();
       setnameImage(true);
     } else console.log("note");
     let imageDataUrl = await readFile(file);

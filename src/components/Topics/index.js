@@ -65,16 +65,12 @@ const Topics = () => {
     getcatAPI()
       .then((res) => {
         localStorage.setItem("ALLtag", JSON.stringify(res));
-        // var datakategori = [];
-        // for (let result of res) {
-        //   datakategori.push({
-        //     id: result.id,
-        //     slug: result.slug,
-        //     title: findItemById(result.id),
-        //   });
-        // }
-        res.sort((a, b) => 0.5 - Math.random());
-        setTopics(res);
+        var datakategori = [];
+        for (let result of res) {
+          datakategori.push(result);
+        }
+        datakategori.sort((a, b) => 0.5 - Math.random());
+        setTopics(datakategori);
       })
       .catch((error) => {
         console.log(error);

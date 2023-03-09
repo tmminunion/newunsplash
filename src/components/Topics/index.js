@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
-import findItemById from "../../utils/TranslateTag";
+
 import s from "./styles.module.scss";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 
@@ -39,7 +39,7 @@ const RightArrow = () => {
   );
 };
 
-const Topic = memo(({ id, slug, title }) => {
+const Topic = memo(({ id, judul }) => {
   const location = useLocation();
   const pathname = location.pathname;
   const current_slug = pathname.slice(3, pathname.length);
@@ -47,10 +47,10 @@ const Topic = memo(({ id, slug, title }) => {
   return (
     <div key={id} className={s.topic}>
       <Link
-        to={`/t/${slug}`}
-        className={slug === current_slug ? s.active_topic : ""}
+        to={`/t/${id}`}
+        className={id === current_slug ? s.active_topic : ""}
       >
-        {title}
+        {judul}
       </Link>
     </div>
   );
@@ -64,6 +64,7 @@ const Topics = () => {
     setLoading(true);
     getcatAPI()
       .then((res) => {
+        localStorage.setItem("ALLtag", JSON.stringify(res));
         // var datakategori = [];
         // for (let result of res) {
         //   datakategori.push({
@@ -72,7 +73,7 @@ const Topics = () => {
         //     title: findItemById(result.id),
         //   });
         // }
-        // //  datakategori.sort((a, b) => 0.5 - Math.random());
+        res.sort((a, b) => 0.5 - Math.random());
         setTopics(res);
       })
       .catch((error) => {

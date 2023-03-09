@@ -106,10 +106,17 @@ export const getCARI = (slug, id) => {
     .get(`${BTAPI}/photo?q=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`)
     .then((response) => response);
 };
-export const getbyALBUM = (slug, id) => {
+export const getbyALBUM = (slug, page) => {
   return axios
     .get(
-      `${BTAPI}/photo?album_title=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`
+      `${BTAPI}/photo?album_title=${slug}&_page=${page}&_limit=30&_sort=id&_order=desc`
+    )
+    .then((response) => response.data);
+};
+export const getbyTAG = (slug, page) => {
+  return axios
+    .get(
+      `${BTAPI}/photo?tag_id=${slug}&_page=${page}&_limit=30&_sort=id&_order=desc`
     )
     .then((response) => response.data);
 };

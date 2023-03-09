@@ -4,12 +4,13 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { faker } from "@faker-js/faker";
 import s from "./styles.module.scss";
 import Modal from "@mui/material/Modal";
-import { getTopic, getbyALBUM } from "../../api";
+import { getTopic, getbyTAG } from "../../api";
 import ImagesGrid from "../../components/ImagesGrid";
 import { LinearProgress } from "../../UI/Loading";
 import RenderIf from "../../utils/RenderIf";
 import PageTitle from "../../utils/PageTitle";
 import Modaluplod from "../../components/Modals/Upload";
+import findItemById from "../../utils/TranslateTag";
 const Topic = () => {
   const { slug } = useParams();
   const [topic, setTopic] = useState({});
@@ -25,7 +26,7 @@ const Topic = () => {
     setBgImageLoading(true);
     getTopic(slug)
       .then((res) => {
-        setTopic(res);
+        // setTopic(res);
       })
       .catch((error) => {
         console.log(error);
@@ -37,7 +38,7 @@ const Topic = () => {
 
   useEffect(() => {
     setImagesLoading(true);
-    getbyALBUM(slug, 1)
+    getbyTAG(slug, 1)
       .then((res) => {
         setTopicImages(res);
         localStorage.setItem("bgtopik", res[0].filepath);
@@ -72,7 +73,7 @@ const Topic = () => {
         </div>
         <div className={s.topic_inner}>
           <div className={s.topic_content}>
-            <h1>{slug}</h1>
+            <h1>{findItemById(slug)}</h1>
             <div className={s.vertical_center}>
               <button onClick={handleOpen} className={s.buttonnya}>
                 Upload Foto

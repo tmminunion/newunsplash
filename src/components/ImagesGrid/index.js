@@ -8,8 +8,9 @@ import { LinearProgress } from "../../UI/Loading";
 import Masonry from "../../UI/Masonry";
 import useMatch from "../../hooks/useMatch";
 import RenderIf from "../../utils/RenderIf";
+import findItemById from "../../utils/TranslateTag";
 
-const Image = memo(({ id, album_title, filepath, description }) => {
+const Image = memo(({ id, tag_id, filepath, low, description }) => {
   const { openModal, modalProps } = useAppContext();
   const match = useMatch("(max-width: 768px)");
   const isImageModal = modalProps.type === "imageModal";
@@ -28,7 +29,7 @@ const Image = memo(({ id, album_title, filepath, description }) => {
           className={s.user_wrapper}
           onClick={match ? () => {} : () => handleOpenModal(id)}
         >
-          <Link to={`/t/${album_title}`} onClick={(e) => e.stopPropagation()}>
+          <Link to={`/t/${tag_id}`} onClick={(e) => e.stopPropagation()}>
             <div className={s.user_image}>
               <LazyLoadImage
                 src={`https://bungtemin.net/photo/imgthumb/${id}`}
@@ -38,7 +39,7 @@ const Image = memo(({ id, album_title, filepath, description }) => {
                 alt='nufat12344'
               />
             </div>
-            <h3>{album_title}</h3>
+            <h3>{findItemById(tag_id)}</h3>
           </Link>
         </div>
       </RenderIf>
@@ -48,10 +49,10 @@ const Image = memo(({ id, album_title, filepath, description }) => {
         className={`${s.image} image`}
       >
         <LazyLoadImage
-          src={filepath}
+          src={low}
           alt={description}
           effect='blur'
-          placeholderSrc={filepath}
+          placeholderSrc={low}
         />
       </div>
     </div>

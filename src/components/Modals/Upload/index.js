@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-
+import { useAuth } from "../../../context/AuthProvider";
 import Box from "@mui/material/Box";
 
 import Demo from "./AppCrop";
+import Login from "../../Login";
 
 const style = {
   position: "absolute",
@@ -18,11 +19,8 @@ const style = {
 };
 
 const Modaluplod = () => {
-  return (
-    <Box sx={style}>
-      <Demo />
-    </Box>
-  );
+  const { setAuth, isLoggedIn, setIsLoggedIn, login, logout } = useAuth();
+  return <Box sx={style}>{isLoggedIn ? <Demo /> : <Login />}</Box>;
 };
 
 export default Modaluplod;

@@ -1,36 +1,50 @@
 import axios from "axios";
 
-const ACCESS_KEY = "o8XokWkKZqJUPogocq58S9_73RF71wG2k11hWC5DIdc";
-axios.defaults.baseURL = "https://api.unsplash.com/";
-axios.defaults.headers.common = {
-  Authorization: `Basic ZGJqc29uVVNFUjpkYmpzb25VU0VS`,
-};
+const BTAPI = process.env.REACT_APP_BTAPI;
+const ACCESS_KEY = process.env.REACT_APP_UNSPALSH_ACCESS_KEY;
+const AUTH = process.env.REACT_APP_AUTH_BT;
+const BTAPIauth = process.env.REACT_APP_BTauth;
+
+axios.defaults.headers.common["Authorization"] = `Bearer ${AUTH}`;
+
+// Add a request interceptor
 const wrapper = (method, url, data) =>
   axios.request({ method, url, data }).then((response) => response.data);
 
 export const getBackgroundImage = () => {
   return wrapper(
     "get",
-    `collections/1459961/photos?client_id=${ACCESS_KEY}&orientation=landscape&per_page=1`
+    `${process.env.REACT_APP_thbaseURL}collections/1459961/photos?client_id=${ACCESS_KEY}&orientation=landscape&per_page=1`
   );
 };
 
 export const getImage = (id) => {
-  return wrapper("get", `photos/${id}?client_id=${ACCESS_KEY}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}photos/${id}?client_id=${ACCESS_KEY}`
+  );
 };
 
 export const getCollection = (id) => {
-  return wrapper("get", `collections/${id}/photos?client_id=${ACCESS_KEY}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}collections/${id}/photos?client_id=${ACCESS_KEY}`
+  );
 };
 
 export const getImages = () => {
-  return wrapper("get", `photos?client_id=${ACCESS_KEY}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}photos?client_id=${ACCESS_KEY}`
+  );
 };
 
 export const getSearchImages = (name, sort = "relevance", orientation) => {
   return wrapper(
     "get",
-    `search/photos?client_id=${ACCESS_KEY}&query=${name}&order_by=${sort}${
+    `${
+      process.env.REACT_APP_thbaseURL
+    }search/photos?client_id=${ACCESS_KEY}&query=${name}&order_by=${sort}${
       orientation ? `&orientation=${orientation}` : ""
     }`
   );
@@ -39,81 +53,115 @@ export const getSearchImages = (name, sort = "relevance", orientation) => {
 export const getSearchCollections = (name) => {
   return wrapper(
     "get",
-    `search/collections?client_id=${ACCESS_KEY}&query=${name}`
+    `${process.env.REACT_APP_thbaseURL}search/collections?client_id=${ACCESS_KEY}&query=${name}`
   );
 };
 
 export const getUserInfo = (username) => {
-  return wrapper("get", `users/${username}/?client_id=${ACCESS_KEY}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}users/${username}/?client_id=${ACCESS_KEY}`
+  );
 };
 
 export const getUserImages = (username) => {
-  return wrapper("get", `users/${username}/photos?client_id=${ACCESS_KEY}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}users/${username}/photos?client_id=${ACCESS_KEY}`
+  );
 };
 
 export const getTopics = () => {
-  return wrapper("get", `topics?client_id=${ACCESS_KEY}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}topics?client_id=${ACCESS_KEY}`
+  );
 };
 
 export const getTopic = (slug) => {
-  return wrapper("get", `topics/${slug}?client_id=${ACCESS_KEY}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}topics/${slug}?client_id=${ACCESS_KEY}`
+  );
 };
 
 export const getTopicImages = (slug) => {
-  return wrapper("get", `topics/${slug}/photos?client_id=${ACCESS_KEY}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}topics/${slug}/photos?client_id=${ACCESS_KEY}`
+  );
 };
 
 export const getSearchUsers = (name) => {
-  return wrapper("get", `search/users?client_id=${ACCESS_KEY}&query=${name}`);
+  return wrapper(
+    "get",
+    `${process.env.REACT_APP_thbaseURL}search/users?client_id=${ACCESS_KEY}&query=${name}`
+  );
 };
 export const getImageAPI = (id) => {
-  return axios
-    .get(`https://img.bungtemin.net/photo/${id}`)
-    .then((response) => response.data);
+  return axios.get(`${BTAPI}/photo/${id}`).then((response) => response.data);
 };
 export const getCARI = (slug, id) => {
   return axios
-    .get(
-      `https://img.bungtemin.net/photo?q=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`
-    )
+    .get(`${BTAPI}/photo?q=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`)
     .then((response) => response);
 };
 export const getbyALBUM = (slug, id) => {
   return axios
     .get(
-      `https://img.bungtemin.net/photo?album_title=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`
+      `${BTAPI}/photo?album_title=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`
     )
     .then((response) => response.data);
 };
 export const getImagesAPI = (id) => {
   return axios
-    .get(
-      `https://img.bungtemin.net/photo?_page=${id}&_limit=30&_sort=id&_order=desc`
-    )
+    .get(`${BTAPI}/photo?_page=${id}&_limit=30&_sort=id&_order=desc`)
     .then((response) => response.data);
 };
 
 export const getnumAPI = (id) => {
   return axios
-    .get(
-      `https://img.bungtemin.net/photo?_page=${id}&_limit=30&_sort=id&_order=desc`
-    )
+    .get(`${BTAPI}/photo?_page=${id}&_limit=30&_sort=id&_order=desc`)
     .then((response) => response.headers);
 };
 export const getcatAPI = (id) => {
   return axios
-    .get(
-      `https://img.bungtemin.net/categori?_page=1&_limit=120&_sort=id&_order=asc`
-    )
+    .get(`${BTAPI}/categori?_page=1&_limit=120&_sort=id&_order=asc`)
     .then((response) => response.data);
 };
 export function Sendphoto(url, datanya) {
   var config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `https://img.bungtemin.net/${url}`,
+    url: `${BTAPI}/${url}`,
     headers: {
-      Authorization: "Basic ZGJqc29uVVNFUjpkYmpzb25VU0VS",
+      "Content-Type": "application/json",
+    },
+    data: datanya,
+  };
+
+  return axios(config).then((response) => response.data);
+}
+
+export function LoginUser(data) {
+  var config = {
+    method: "post",
+    url: `${BTAPIauth}/login/`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+
+  return axios(config).then((response) => response.data);
+}
+
+export function Sendsync(datanya) {
+  var config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${BTAPIauth}/datafire/${datanya}`,
+    headers: {
       "Content-Type": "application/json",
     },
     data: datanya,

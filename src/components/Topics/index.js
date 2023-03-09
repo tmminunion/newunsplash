@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
-
+import findItemById from "../../utils/TranslateTag";
 import s from "./styles.module.scss";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 
@@ -64,7 +64,15 @@ const Topics = () => {
     setLoading(true);
     getcatAPI()
       .then((res) => {
-        res.sort((a, b) => 0.5 - Math.random());
+        // var datakategori = [];
+        // for (let result of res) {
+        //   datakategori.push({
+        //     id: result.id,
+        //     slug: result.slug,
+        //     title: findItemById(result.id),
+        //   });
+        // }
+        // //  datakategori.sort((a, b) => 0.5 - Math.random());
         setTopics(res);
       })
       .catch((error) => {

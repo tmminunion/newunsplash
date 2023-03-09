@@ -1,5 +1,9 @@
 import estring from "../../../utils/idgenerator";
-import { Sendphoto } from "../../../api";
+import generateRandomString from "../../../utils/GenerateIDslug";
+import { Sendphoto, Sendsync } from "../../../api";
+import slug from "slug";
+import { ref, set } from "firebase/database";
+import database from "../../../utils/firebase";
 
 export const createImage = (url) =>
   new Promise((resolve, reject) => {
@@ -103,34 +107,49 @@ export async function getCroppedImg(
     imgid: idnya,
     album_id: 1,
     album_title: nameimage,
-
-    filepath: `https://bungtemin.net/photo/img/${idnya}`,
-    imgthumb: `https://bungtemin.net/photo/imgthumb/${idnya}/200/200`,
+    tag_title: nameimage,
+    tag_slug: slug(nameimage),
+    tag_id: generateRandomString(nameimage),
+    filepath: `https://bt-api.bungtemin.net/img/${idnya}`,
+    thumbnail: `https://bt-api.bungtemin.net/img/${idnya}/thumb`,
+    low: `https://bt-api.bungtemin.net/img/${idnya}/resize/30`,
     width: canvas.width,
     height: canvas.height,
+    user_id: localStorage.getItem("user_id"),
+    user_nama: localStorage.getItem("user_nama"),
+    user_noreg: localStorage.getItem("user_noreg"),
     uploaded_date: Date.now(),
   });
 
-  var dataimg = JSON.stringify({
-    id: idnya,
-    filepath: base64,
-  });
-
   var datacate = JSON.stringify({
-    id: nameimage,
-    slug: nameimage,
+    id: generateRandomString(nameimage),
+    slug: slug(nameimage),
     title: nameimage,
+    judul: nameimage,
   });
 
   Sendphoto("categori", datacate).then((response) => {
     console.log(response);
   });
-  Sendphoto("photo", datanya).then((response) => {
-    Sendphoto("media", dataimg).then((response) => {
-      console.log("udah");
-      window.location.href = "/";
+  const db = database;
+
+  set(ref(db, "data/" + idnya), {
+    id: idnya,
+    image: base64,
+    width: canvas.width,
+    height: canvas.height,
+  })
+    .then(() => {
+      Sendsync(idnya).then((response) => {
+        Sendphoto("photo", datanya).then((response) => {
+          console.log("photo terkirim");
+          window.location.href = "/";
+        });
+      });
+    })
+    .catch((error) => {
+      console.log(error);
     });
-  });
 
   // As a blob
   return new Promise((resolve, reject) => {

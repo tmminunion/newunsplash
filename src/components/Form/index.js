@@ -55,14 +55,6 @@ const Form = ({ isNavbarForm }) => {
           onChange={handleChange}
           style={{ paddingRight: value ? 50 : 20 }}
         />
-        <RenderIf isTrue={value}>
-          <button
-            className={clsx(s.form_icon, s.clear_icon)}
-            onClick={() => setValue("")}
-          >
-            <MdOutlineClose />
-          </button>
-        </RenderIf>
       </div>
     </form>
   );

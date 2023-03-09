@@ -16,6 +16,7 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+
 const getColor = (props) => {
   if (props.isDragAccept) {
     return "red";
@@ -89,6 +90,7 @@ const Demo = ({ classes }) => {
 
   const onFileChange = async (file) => {
     //   const file = e.target.files[0];
+
     const dodol = await runfile(file);
     if (dodol) {
       console.log("ready gambar");

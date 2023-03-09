@@ -1,7 +1,8 @@
-import React from "react";
+import { React, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { useAppContext } from "./context";
+
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import SearchImages from "./pages/SearchImages";
@@ -13,9 +14,10 @@ import User from "./pages/User";
 import Modal from "./UI/Modal";
 import GlobalStyle from "./GlobalStyle";
 import Footer from "./components/Footer";
+import { useAuth } from "./context/AuthProvider";
 const App = () => {
   const { modalProps } = useAppContext();
-
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
   return (
     <Router>
       <GlobalStyle />

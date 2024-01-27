@@ -32,11 +32,11 @@ const Image = memo(({ id, tag_id, filepath, low, description }) => {
           <Link to={`/t/${tag_id}`} onClick={(e) => e.stopPropagation()}>
             <div className={s.user_image}>
               <LazyLoadImage
-                src={`https://bungtemin.net/photo/imgthumb/${id}`}
+                src={`https://bungtemin.net/images/imgthumb/${id}`}
                 effect='blur'
                 width={32}
                 height={32}
-                alt='nufat12344'
+                alt='nuf12344'
               />
             </div>
             <h3>{findItemById(tag_id)}</h3>
@@ -49,7 +49,7 @@ const Image = memo(({ id, tag_id, filepath, low, description }) => {
         className={`${s.image} image`}
       >
         <LazyLoadImage
-          src={low}
+          src={`https://bungtemin.net/images/imgthumb/${id}`}
           alt={description}
           effect='blur'
           placeholderSrc={low}

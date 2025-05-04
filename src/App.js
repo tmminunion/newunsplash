@@ -5,6 +5,7 @@ import { useAppContext } from "./context";
 
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
+import Album from "./pages/Album";
 import SearchImages from "./pages/SearchImages";
 import SearchCollections from "./pages/SearchCollections";
 import Collection from "./pages/Collection";
@@ -24,7 +25,7 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route exact path='/' element={<Home />} />
-
+        <Route exact path='/a/:album' element={<Album />} />
         <Route path='/p/:name/:sort' element={<SearchImages />} />
         <Route path='/p/:name/:sort/:orientation' element={<SearchImages />} />
         <Route path='/c/:name' element={<SearchCollections />} />

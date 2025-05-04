@@ -25,7 +25,7 @@ const Image = () => {
   const match = useMatch("(max-width: 768px)");
 
   const { data } = modalProps;
-  const { uploaded_date, filepath, album_title } = image;
+  const { uploaded_date, filepath, album_title, tag_id } = image;
 
   useEffect(() => {
     setLoading(true);
@@ -71,12 +71,12 @@ const Image = () => {
         <div className={s.user}>
           <div className={s.photo}>
             <LazyLoadImage
-              src={faker.image.avatar()}
+              src='https://bungtemin.net/assets/img/logo512.png'
               alt='{user?.name}'
               effect='blur'
             />
           </div>
-          <Link to={`/namauser`} onClick={closeModal}>
+          <Link to={`t/${tag_id}`} onClick={closeModal}>
             {album_title}
           </Link>
         </div>

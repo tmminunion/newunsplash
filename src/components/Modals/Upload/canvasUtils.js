@@ -128,7 +128,7 @@ export async function getCroppedImg(
     judul: nameimage,
   });
 
-  Sendphoto("categori", datacate).then((response) => {
+  Sendphoto("sendcategori", datacate).then((response) => {
     console.log(response);
   });
   const db = database;
@@ -141,7 +141,7 @@ export async function getCroppedImg(
   })
     .then(() => {
       Sendsync(idnya).then((response) => {
-        Sendphoto("photo", datanya).then((response) => {
+        Sendphoto("sendpoto", datanya).then((response) => {
           console.log("photo terkirim");
           window.location.href = "/";
         });

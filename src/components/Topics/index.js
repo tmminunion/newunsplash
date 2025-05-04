@@ -64,9 +64,9 @@ const Topics = () => {
     setLoading(true);
     getcatAPI()
       .then((res) => {
-        localStorage.setItem("ALLtag", JSON.stringify(res));
+        localStorage.setItem("ALLtag", JSON.stringify(res.data));
         var datakategori = [];
-        for (let result of res) {
+        for (let result of res.data) {
           datakategori.push(result);
         }
         datakategori.sort((a, b) => 0.5 - Math.random());

@@ -32,7 +32,7 @@ const Image = memo(({ id, tag_id, filepath, low, description }) => {
           <Link to={`/t/${tag_id}`} onClick={(e) => e.stopPropagation()}>
             <div className={s.user_image}>
               <LazyLoadImage
-                src={`https://bungtemin.net/images/imgthumb/${id}`}
+                src={`https://wabot.nufat.id/img/${id}/thumb/32/32`}
                 effect='blur'
                 width={32}
                 height={32}
@@ -49,7 +49,7 @@ const Image = memo(({ id, tag_id, filepath, low, description }) => {
         className={`${s.image} image`}
       >
         <LazyLoadImage
-          src={`https://bungtemin.net/images/imgthumb/${id}`}
+          src={`https://wabot.nufat.id/img/${id}/thumb/500/500`}
           alt={description}
           effect='blur'
           placeholderSrc={low}

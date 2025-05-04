@@ -19,13 +19,12 @@ const Home = () => {
 
   useEffect(() => {
     getImagesAPI(1).then((response) => {
-      setImages(response);
-      localStorage.setItem("bgimage", response[0].filepath);
+      setImages(response.data);
+      localStorage.setItem("bgimage", response.data[0].filepath);
     });
     getnumAPI(1).then((response) => {
-      var totalItems = response["x-total-count"];
-      var totalPages = Math.ceil(totalItems / 30);
-      totsetImages(totalPages);
+      console.log(response.pagination);
+      totsetImages(response.pagination.totalPages);
       setPage(1);
     });
 

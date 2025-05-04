@@ -8,7 +8,8 @@ const Login = () => {
   const { closeModal } = useAppContext();
   const userRef = useRef();
   const errRef = useRef();
-
+  const ADMIN = process.env.REACT_APP_ADMIN;
+  const PASS = process.env.REACT_APP_PASS;
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -20,7 +21,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (user === "admin" && pwd === "Nurani123") {
+    if (user === ADMIN && pwd === PASS) {
       const accessToken = "dummy-token"; // bisa diganti dengan token generator kalau mau
       const roles = "Admin";
       const id = "1";

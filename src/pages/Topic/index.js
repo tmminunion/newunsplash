@@ -40,8 +40,8 @@ const Topic = () => {
     setImagesLoading(true);
     getbyTAG(slug, 1)
       .then((res) => {
-        setTopicImages(res);
-        localStorage.setItem("bgtopik", res[0].filepath);
+        setTopicImages(res.data);
+        localStorage.setItem("bgtopik", res.data[0].filepath);
       })
       .catch((error) => {
         console.log(error);

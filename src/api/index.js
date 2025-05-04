@@ -1,6 +1,5 @@
 import axios from "axios";
 
-const BTAPI = process.env.REACT_APP_BTAPI;
 const ACCESS_KEY = process.env.REACT_APP_UNSPALSH_ACCESS_KEY;
 const AUTH = process.env.REACT_APP_AUTH_BT;
 const BTAPIauth = process.env.REACT_APP_BTauth;
@@ -98,49 +97,56 @@ export const getSearchUsers = (name) => {
     `${process.env.REACT_APP_thbaseURL}search/users?client_id=${ACCESS_KEY}&query=${name}`
   );
 };
+
 export const getImageAPI = (id) => {
-  return axios.get(`${BTAPI}/photo/${id}`).then((response) => response.data);
+  return axios
+    .get(`${BTAPIauth}/photo/${id}`)
+    .then((response) => response.data);
 };
 export const getCARI = (slug, id) => {
   return axios
-    .get(`${BTAPI}/photo?q=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`)
+    .get(
+      `${BTAPIauth}/photo?q=${slug}&_page=${id}&_limit=30&_sort=id&_order=desc`
+    )
     .then((response) => response);
 };
 export const getbyALBUM = (slug, page) => {
   return axios
     .get(
-      `${BTAPI}/photo?album_title=${slug}&_page=${page}&_limit=30&_sort=id&_order=desc`
+      `${BTAPIauth}/photo?album_title=${slug}&_page=${page}&_limit=30&_sort=id&_order=desc`
     )
     .then((response) => response.data);
 };
 export const getbyTAG = (slug, page) => {
   return axios
     .get(
-      `${BTAPI}/photo?tag_id=${slug}&_page=${page}&_limit=30&_sort=id&_order=desc`
+      `${BTAPIauth}/photo?tag_id=${slug}&_page=${page}&_limit=30&_sort=id&_order=desc`
     )
     .then((response) => response.data);
 };
 export const getImagesAPI = (id) => {
   return axios
-    .get(`${BTAPI}/photo?_page=${id}&_limit=30&_sort=id&_order=desc`)
+    .get(`${BTAPIauth}/photo?_page=${id}&_limit=30&_sort=id&_order=desc`)
     .then((response) => response.data);
 };
 
 export const getnumAPI = (id) => {
   return axios
-    .get(`${BTAPI}/photo?_page=${id}&_limit=30&_sort=id&_order=desc`)
-    .then((response) => response.headers);
-};
-export const getcatAPI = (id) => {
-  return axios
-    .get(`${BTAPI}/categori?_page=1&_limit=120&_sort=id&_order=asc`)
+    .get(`${BTAPIauth}/photo?_page=${id}&_limit=30&_sort=id&_order=desc`)
     .then((response) => response.data);
 };
+
+export const getcatAPI = (id) => {
+  return axios
+    .get(`${BTAPIauth}/category?_page=1&_limit=120&_sort=id&_order=asc`)
+    .then((response) => response.data);
+};
+
 export function Sendphoto(url, datanya) {
   var config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${BTAPI}/${url}`,
+    url: `${BTAPIauth}/${url}`,
     headers: {
       "Content-Type": "application/json",
     },

@@ -1,11 +1,11 @@
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthProvider";
 import s from "./styles.module.scss";
-import { LoginUser } from "../../api";
+//import { LoginUser } from "../../api";
 import { useAppContext } from "../../context";
 const Login = () => {
-  const { setAuth, isLoggedIn, setIsLoggedIn, login, logout } = useAuth();
-  const { modalProps, modalRef, closeModal } = useAppContext();
+  const { setAuth, isLoggedIn, setIsLoggedIn } = useAuth();
+  const { closeModal } = useAppContext();
   const userRef = useRef();
   const errRef = useRef();
 
@@ -20,30 +20,53 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    LoginUser(JSON.stringify({ user, pwd }))
-      .then((result) => {
-        console.log(result.data);
-        const accessToken = result?.data?.token;
-        const roles = result?.data?.nama;
-        const id = result?.data?.id;
-        setAuth({ user, id, roles, accessToken });
-        localStorage.setItem(
-          "authToken",
-          JSON.stringify({ user, id, roles, accessToken })
-        );
-        localStorage.setItem("user_nama", roles);
-        localStorage.setItem("user_id", id);
-        localStorage.setItem("user_noreg", user);
-        localStorage.setItem("user_token", accessToken);
-        setUser("");
-        setPwd("");
+    if (user === "admin" && pwd === "Nurani123") {
+      const accessToken = "dummy-token"; // bisa diganti dengan token generator kalau mau
+      const roles = "Admin";
+      const id = "1";
 
-        setIsLoggedIn(true);
-      })
-      .catch((error) => {
-        setErrMsg("kesalahan username atau password");
-        console.log(error);
-      });
+      setAuth({ user, id, roles, accessToken });
+
+      localStorage.setItem(
+        "authToken",
+        JSON.stringify({ user, id, roles, accessToken })
+      );
+      localStorage.setItem("user_nama", roles);
+      localStorage.setItem("user_id", id);
+      localStorage.setItem("user_noreg", user);
+      localStorage.setItem("user_token", accessToken);
+
+      setUser("");
+      setPwd("");
+      setIsLoggedIn(true);
+    } else {
+      setErrMsg("kesalahan username atau password");
+    }
+
+    // LoginUser(JSON.stringify({ user, pwd }))
+    //   .then((result) => {
+    //     console.log(result.data);
+    //     const accessToken = result?.data?.token;
+    //     const roles = result?.data?.nama;
+    //     const id = result?.data?.id;
+    //     setAuth({ user, id, roles, accessToken });
+    //     localStorage.setItem(
+    //       "authToken",
+    //       JSON.stringify({ user, id, roles, accessToken })
+    //     );
+    //     localStorage.setItem("user_nama", roles);
+    //     localStorage.setItem("user_id", id);
+    //     localStorage.setItem("user_noreg", user);
+    //     localStorage.setItem("user_token", accessToken);
+    //     setUser("");
+    //     setPwd("");
+
+    //     setIsLoggedIn(true);
+    //   })
+    //   .catch((error) => {
+    //     setErrMsg("kesalahan username atau password");
+    //     console.log(error);
+    //   });
   };
 
   return (

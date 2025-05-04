@@ -1,9 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-
 import s from "./styles.module.scss";
-
 import Tabs from "../../UI/Tabs";
 import { LinearProgress } from "../../UI/Loading";
 
@@ -23,7 +21,7 @@ const User = ({ id, profile_image, name, username, photos }) => {
         {photos.map((photo) => {
           return (
             <div key={photo.id} className={s.image}>
-              <LazyLoadImage src={photo.urls.small} alt="photo" effect="blur" />
+              <LazyLoadImage src={photo.urls.small} alt='photo' effect='blur' />
             </div>
           );
         })}
@@ -39,7 +37,7 @@ const UsersGrid = ({ name, users, loading }) => {
   return (
     <>
       <div className={s.tabs_wrapper}>
-        <Tabs name={name} tab="u" />
+        <Tabs name={name} tab='u' />
       </div>
       <LinearProgress loading={loading}>
         <div className={s.users_outer}>

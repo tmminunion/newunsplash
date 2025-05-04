@@ -26,10 +26,16 @@ const checkIsLoggedIn = () => {
   const isValid = validateToken(tokennya);
 
   // jika token tidak null, maka pengguna telah login
-  if (token && isValid) {
-    console.log(`user : ${localStorage.getItem("user_nama")}`);
+  // if (token && isValid) {
+  //   console.log(`user : ${localStorage.getItem("user_nama")}`);
+  //   return true;
+
+  // }
+
+  if (token && tokennya) {
     return true;
   }
+
   localStorage.removeItem("authToken");
   localStorage.removeItem("user_nama");
   localStorage.removeItem("user_id");

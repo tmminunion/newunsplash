@@ -1,69 +1,96 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import Cropper from "react-easy-crop";
-import Slider from "@material-ui/core/Slider";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
+import { 
+  Upload, 
+  Crop, 
+  RotateCcw, 
+  ZoomIn, 
+  Image as ImageIcon, 
+  Check, 
+  X, 
+  Loader2,
+  Maximize
+} from "lucide-react";
 import { getOrientation } from "get-orientation/browser";
 import ImgDialog from "./ImgDialog";
 import { getCroppedImg, getRotatedImage } from "./canvasUtils";
-import { styles } from "./styles";
-import FormControl from "@material-ui/core/FormControl";
-import runfile from "../../../tensor";
 import { useDropzone } from "react-dropzone";
-import styled from "styled-components";
-import Box from "@mui/material/Box";
-import LinearProgress from "@mui/material/LinearProgress";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import styled, { keyframes } from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 
-const getColor = (props) => {
-  if (props.isDragAccept) {
-    return "red";
-  }
-  if (props.isDragReject) {
-    return "#ff1744";
-  }
-  if (props.isFocused) {
-    return "#2196f3";
-  }
-  return "gold";
-};
+const shimmer = keyframes`
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+`;
 
-const Container = styled.div`
+const DropzoneContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  text-align: center;
+  justify-content: center;
   align-items: center;
-  margin-top: 30px;
   padding: 60px;
   height: 400px;
-  border-width: 3px;
-  color: red;
-  border-radius: 4px;
-  border-color: ${(props) => getColor(props)};
-  border-style: dashed;
-  background-color: #c0c0c0;
-
-  outline: none;
-  transition: border 0.24s ease-in-out;
+  border: 2px dashed ${props => props.isDragActive ? "var(--primary)" : "var(--border-glass)"};
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.3);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: var(--primary);
+    background: rgba(30, 41, 59, 0.5);
+    color: var(--text-primary);
+  }
 `;
-const ORIENTATION_TO_ANGLE = {
-  3: 180,
-  6: 90,
-  8: -90,
-};
-const fileTypes = ["JPEG", "PNG", "GIF"];
-const Demo = ({ classes }) => {
-  const [imageSrc, setImageSrc] = React.useState(null);
+
+const ProgressTrack = styled.div`
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 20px;
+`;
+
+const ProgressFill = styled.div`
+  height: 100%;
+  background: var(--primary);
+  width: ${props => props.value}%;
+  transition: width 0.3s ease;
+  position: relative;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    animation: ${shimmer} 1.5s infinite;
+  }
+`;
+
+const ORIENTATION_TO_ANGLE = { 3: 180, 6: 90, 8: -90 };
+
+const Demo = () => {
+  const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
-  const [nameImage, setnameImage] = useState(false);
-  const [loadingnya, setloadingnya] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [aspectRatio, setAspectRatio] = useState(4 / 3);
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -71,36 +98,30 @@ const Demo = ({ classes }) => {
 
   const showCroppedImage = useCallback(async () => {
     try {
-      const croppedImage = await getCroppedImg(
-        imageSrc,
-        croppedAreaPixels,
-        rotation
-      );
-
+      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels, rotation);
       setCroppedImage(croppedImage);
     } catch (e) {
       console.error(e);
     }
   }, [imageSrc, croppedAreaPixels, rotation]);
 
-  const onClose = useCallback(() => {
-    setCroppedImage(null);
-    setnameImage(false);
-  }, []);
-
   const onFileChange = async (file) => {
-    //   const file = e.target.files[0];
+    setLoading(true);
+    setProgress(0);
+    
+    // Simulate analyzer progress
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + Math.random() * 20;
+      });
+    }, 200);
 
-    const dodol = await runfile(file);
-    if (dodol) {
-      console.log("ready gambar");
-
-      setnameImage(true);
-    } else console.log("note");
     let imageDataUrl = await readFile(file);
-
     try {
-      // apply rotation if needed
       const orientation = await getOrientation(file);
       const rotation = ORIENTATION_TO_ANGLE[orientation];
       if (rotation) {
@@ -110,160 +131,146 @@ const Demo = ({ classes }) => {
       console.warn("failed to detect the orientation");
     }
 
-    setImageSrc(imageDataUrl);
+    setTimeout(() => {
+      setImageSrc(imageDataUrl);
+      setLoading(false);
+      clearInterval(interval);
+    }, 1500);
   };
-  const [aspectRatio, setAspectRatio] = useState(4 / 3);
-  const onAspectRatioChange = (event) => {
-    setAspectRatio(event.target.value);
-  };
-  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
-    useDropzone({
-      accept: { "image/*": [] },
-      onDrop: (acceptedFiles) => {
-        setloadingnya(true);
-        acceptedFiles.map((file) => onFileChange(file));
-      },
-    });
-  const [progress, setProgress] = React.useState(0);
-  const [buffer, setBuffer] = React.useState(10);
 
-  const progressRef = React.useRef(() => {});
-  React.useEffect(() => {
-    progressRef.current = () => {
-      if (progress > 100) {
-        setProgress(0);
-        setBuffer(10);
-      } else {
-        const diff = Math.random() * 10;
-        const diff2 = Math.random() * 10;
-        setProgress(progress + diff);
-        setBuffer(progress + diff + diff2);
-      }
-    };
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: { "image/*": [] },
+    onDrop: (acceptedFiles) => acceptedFiles.map(onFileChange),
   });
 
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      progressRef.current();
-    }, 500);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  const hadleskip = (event) => {
-    setloadingnya(false);
-    setnameImage(true);
-  };
   return (
-    <div>
-      {imageSrc ? (
-        <React.Fragment>
-          <div className={classes.cropContainer}>
-            <Cropper
-              image={imageSrc}
-              crop={crop}
-              rotation={rotation}
-              zoom={zoom}
-              aspect={aspectRatio}
-              onCropChange={setCrop}
-              onRotationChange={setRotation}
-              onCropComplete={onCropComplete}
-              onZoomChange={setZoom}
-            />
-          </div>{" "}
-          <Typography align='center'>
-            {localStorage.getItem("namatit")}
-          </Typography>
-          <div className={classes.controls}>
-            <div className={classes.sliderContainer}>
-              <div>
-                <FormControl sx={{ m: 1, minWidth: 80 }}>
-                  <Select
-                    labelId='demo-simple-select-autowidth-label'
-                    id='demo-simple-select-autowidth'
-                    value={aspectRatio}
-                    onChange={onAspectRatioChange}
-                    autoWidth
-                    label='Age'
-                  >
-                    <MenuItem value={1 / 1}>1:1</MenuItem>
-                    <MenuItem value={1 / 2}>1:2</MenuItem>
-                    <MenuItem value={1 / 3}>1:3</MenuItem>
-                    <MenuItem value={2 / 1}>2:1</MenuItem>
-                    <MenuItem value={5 / 4}>5:4</MenuItem>
-                    <MenuItem value={3 / 4}>3:4</MenuItem>
-                    <MenuItem value={4 / 3}>4:3</MenuItem>
-                    <MenuItem value={1.9 / 1}>1.9:1</MenuItem>
-                    <MenuItem value={9 / 6}>9:6</MenuItem>
-                    <MenuItem value={3 / 2}>3:2</MenuItem>
-                    <MenuItem value={5 / 3}>5:3</MenuItem>
-                    <MenuItem value={3 / 5}>3:5</MenuItem>
-                    <MenuItem value={16 / 9}>16:9</MenuItem>
-                    <MenuItem value={3 / 1}>3:1</MenuItem>
-                  </Select>
-                </FormControl>
+    <div style={{ color: "var(--text-primary)", padding: "20px" }}>
+      <AnimatePresence mode="wait">
+        {!imageSrc && !loading && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+          >
+            <h2 style={{ marginBottom: "20px", textAlign: "center", fontFamily: "Outfit" }}>Upload & Polish</h2>
+            <DropzoneContainer {...getRootProps()} isDragActive={isDragActive}>
+              <input {...getInputProps()} />
+              <div style={{ background: "rgba(251, 191, 36, 0.1)", color: "var(--primary)", padding: "20px", borderRadius: "50%", marginBottom: "20px" }}>
+                <Upload size={48} />
               </div>
+              <p style={{ fontSize: "18px", fontWeight: "500", marginBottom: "8px" }}>
+                Drag & drop your masterpiece here
+              </p>
+              <p style={{ fontSize: "14px", opacity: 0.7 }}>
+                or click to browse your files
+              </p>
+            </DropzoneContainer>
+          </motion.div>
+        )}
 
-              <Slider
-                value={zoom}
-                min={1}
-                max={3}
-                step={0.1}
-                aria-labelledby='Zoom'
-                classes={{ root: classes.slider }}
-                onChange={(e, zoom) => setZoom(zoom)}
+        {loading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{ textAlign: "center", padding: "60px 20px" }}
+          >
+            <Loader2 size={48} className="spin" style={{ color: "var(--primary)", marginBottom: "24px" }} />
+            <h3 style={{ marginBottom: "12px", fontFamily: "Outfit" }}>Analyzing Image Intelligence</h3>
+            <p style={{ color: "var(--text-secondary)", marginBottom: "32px" }}>
+              Our AI is scanning the image for quality and tags...
+            </p>
+            <div style={{ maxWidth: "400px", margin: "0 auto" }}>
+              <ProgressTrack>
+                <ProgressFill value={progress} />
+              </ProgressTrack>
+              <p style={{ marginTop: "12px", fontSize: "14px", fontWeight: "600", color: "var(--primary)" }}>
+                {Math.round(progress)}%
+              </p>
+            </div>
+          </motion.div>
+        )}
+
+        {imageSrc && !loading && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            <div style={{ position: "relative", height: "400px", background: "#0f172a", borderRadius: "12px", overflow: "hidden", marginBottom: "20px" }}>
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                rotation={rotation}
+                zoom={zoom}
+                aspect={aspectRatio}
+                onCropChange={setCrop}
+                onRotationChange={setRotation}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
               />
             </div>
 
-            {nameImage ? (
-              <Button
-                onClick={showCroppedImage}
-                variant='contained'
-                color='primary'
-                classes={{ root: classes.cropButton }}
-              >
-                Upload Photo
-              </Button>
-            ) : null}
-          </div>
-          <ImgDialog img={croppedImage} onClose={onClose} />
-        </React.Fragment>
-      ) : (
-        <>
-          <div className='App'>
-            <h1>Upload file</h1>
-            {/* <input type='file' onChange={onFileChange} accept='image/*' />
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", alignItems: "center", justifyContent: "space-between", padding: "20px", background: "rgba(0,0,0,0.2)", borderRadius: "12px" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.08)", padding: "10px 16px", borderRadius: "10px", border: "1px solid var(--border-glass)" }}>
+                  <Maximize size={18} style={{ color: "var(--primary)" }} />
+                  <span style={{ fontSize: "14px", fontWeight: "600", marginRight: "4px" }}>Ratio:</span>
+                  <select 
+                    value={aspectRatio} 
+                    onChange={(e) => setAspectRatio(parseFloat(e.target.value))}
+                    style={{ 
+                      background: "rgba(15, 23, 42, 0.8)", 
+                      border: "1px solid rgba(251, 191, 36, 0.3)", 
+                      color: "white", 
+                      outline: "none", 
+                      cursor: "pointer",
+                      padding: "4px 8px",
+                      borderRadius: "6px",
+                      fontSize: "14px",
+                      fontWeight: "600"
+                    }}
+                  >
+                    <option value={1} style={{ background: "#1e293b" }}>1:1 (Square)</option>
+                    <option value={4/3} style={{ background: "#1e293b" }}>4:3 (Standard)</option>
+                    <option value={16/9} style={{ background: "#1e293b" }}>16:9 (Wide)</option>
+                    <option value={3/2} style={{ background: "#1e293b" }}>3:2 (Classic)</option>
+                    <option value={5/4} style={{ background: "#1e293b" }}>5:4 (Portrait)</option>
+                  </select>
+                </div>
 
-            */}
-            {!loadingnya ? (
-              <div className='container'>
-                <Container
-                  {...getRootProps({ isFocused, isDragAccept, isDragReject })}
-                >
-                  <input {...getInputProps()} />
-                  <p>
-                    Drag 'n' drop file kesini, atau klik disini untuk upload
-                  </p>
-                </Container>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(255,255,255,0.08)", padding: "10px 16px", borderRadius: "10px", border: "1px solid var(--border-glass)" }}>
+                  <ZoomIn size={18} style={{ color: "var(--primary)" }} />
+                  <input
+                    type="range"
+                    value={zoom}
+                    min={1}
+                    max={3}
+                    step={0.1}
+                    onChange={(e) => setZoom(e.target.value)}
+                    style={{ width: "120px", accentColor: "var(--primary)", cursor: "pointer" }}
+                  />
+                </div>
               </div>
-            ) : (
-              <Box sx={{ width: "100%" }}>
-                <Typography align='center'>
-                  <p>Disini Kami Menganalisa Gambar dengan Kecerdasan Buatan</p>
-                  <p>Sedang Menganalisa gambar ....</p>
-                </Typography>
-                <p></p>
-                <LinearProgress
-                  variant='buffer'
-                  value={progress}
-                  valueBuffer={buffer}
-                />
-              </Box>
-            )}
-          </div>
-        </>
-      )}
+
+
+              <div style={{ display: "flex", gap: "12px" }}>
+                <button 
+                  onClick={() => setImageSrc(null)}
+                  style={{ background: "rgba(255,255,255,0.1)", border: "none", color: "white", padding: "10px 20px", borderRadius: "10px", cursor: "pointer", fontWeight: "600" }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={showCroppedImage}
+                  style={{ background: "var(--primary)", border: "none", color: "var(--bg-main)", padding: "10px 24px", borderRadius: "10px", cursor: "pointer", fontWeight: "700", display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <Check size={20} /> Finish & Upload
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <ImgDialog img={croppedImage} onClose={() => setCroppedImage(null)} />
     </div>
   );
 };
@@ -276,6 +283,4 @@ function readFile(file) {
   });
 }
 
-const StyledDemo = withStyles(styles)(Demo);
-
-export default StyledDemo;
+export default Demo;

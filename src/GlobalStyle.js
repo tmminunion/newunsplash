@@ -99,6 +99,14 @@ const GlobalStyle = createGlobalStyle`
     color: var(--text-secondary);
     font-size: 14px;
   }
+  /* Animations */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .spin {
+    animation: spin 2s linear infinite;
+  }
 `;
 
 export default GlobalStyle;

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { motion, AnimatePresence } from "framer-motion";
+import { Download, Calendar, User as UserIcon, Maximize2, Minimize2, Heart, Share2, Info } from "lucide-react";
 import clsx from "clsx";
-import { faker } from "@faker-js/faker";
 import s from "./styles.module.scss";
-import { MdOutlineCalendarToday } from "react-icons/md";
 
 import { useAppContext } from "../../../context";
 import { getImageAPI } from "../../../api";
@@ -14,11 +13,10 @@ import useMatch from "../../../hooks/useMatch";
 
 import DownloadImage from "../../../utils/DownloadImage";
 import { dateFormat } from "../../../utils/Helpers";
-faker.locale = "id_ID";
-const Image = () => {
+
+const ImageModalContent = () => {
   const { modalProps, modalRef, closeModal } = useAppContext();
   const [image, setImage] = useState({});
-
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isZooming, setIsZooming] = useState(false);
@@ -34,7 +32,7 @@ const Image = () => {
         setImage(res);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Error fetching image details:", error);
       })
       .finally(() => {
         setLoading(false);
@@ -43,81 +41,80 @@ const Image = () => {
   }, [data?.id]);
 
   useEffect(() => {
-    if (modalProps?.isOpen) {
-      if (data?.id) {
-        modalRef.current.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth",
-        });
-      }
+    if (modalProps?.isOpen && modalRef.current) {
+      modalRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [modalProps?.isOpen, data?.id, modalRef]);
 
-  useEffect(() => {
-    if (match) {
-      setIsZooming(false);
-    }
-  }, [match, isZooming]);
-
   const handleZoom = () => {
-    if (match) return;
-    setIsZooming(!isZooming);
+    if (!match) setIsZooming(!isZooming);
   };
 
   return (
-    <div className={s.modal}>
-      <div className={s.modal_header}>
-        <div className={s.user}>
-          <div className={s.photo}>
-            <LazyLoadImage
-              src='https://bungtemin.net/assets/img/logo512.png'
-              alt='{user?.name}'
-              effect='blur'
-            />
+    <div className={`${s.modal_container} glass`}>
+      <header className={s.header}>
+        <div className={s.user_info}>
+          <div className={s.avatar}>
+            <img src='https://bungtemin.net/assets/img/logo512.png' alt='Author' />
           </div>
-          <Link to={`t/${tag_id}`} onClick={closeModal}>
-            {album_title}
-          </Link>
+          <div className={s.meta}>
+            <Link to={`/t/${tag_id}`} className={s.album_name} onClick={closeModal}>
+              {album_title || "BT-Gallery Image"}
+            </Link>
+            <span className={s.author_name}>by @bungtemin</span>
+          </div>
         </div>
-        <div className={s.download}>
+
+        <div className={s.actions}>
+          <button className={s.action_btn} title="Add to favorites">
+            <Heart size={20} />
+          </button>
+          <button className={s.action_btn} title="Share">
+            <Share2 size={20} />
+          </button>
           <a
             href={filepath}
-            download
-            className={isDownloading ? s.disable_button : ""}
+            className={clsx(s.download_btn, { [s.loading]: isDownloading })}
             onClick={(e) => DownloadImage(e, setIsDownloading)}
           >
-            {isDownloading
-              ? "Sudah di copy dan Download"
-              : "Copy Link Image dan Download"}
+            <Download size={18} />
+            {!match && (isDownloading ? "Downloading..." : "Download Free")}
           </a>
         </div>
-      </div>
+      </header>
 
-      <div className={clsx(s.modal_body, { [s.full_image]: isZooming })}>
+      <div className={clsx(s.body, { [s.zoomed]: isZooming })}>
         <Spinner loading={loading}>
-          <LazyLoadImage
-            src={filepath}
-            alt='desc'
-            effect='blur'
-            onClick={handleZoom}
-          />
+          <div className={s.image_wrapper} onClick={handleZoom}>
+            <LazyLoadImage
+              src={filepath}
+              alt={album_title}
+              effect='blur'
+              className={s.main_image}
+            />
+            {!match && (
+              <div className={s.zoom_indicator}>
+                {isZooming ? <Minimize2 /> : <Maximize2 />}
+              </div>
+            )}
+          </div>
         </Spinner>
       </div>
 
-      <div className={s.modal_footer}>
-        <div className={s.first_row}></div>
-
-        <div className={s.second_row}>
-          <div className={s.second_row_item}>
-            <MdOutlineCalendarToday />
-
-            <div>Published on {dateFormat(uploaded_date)}</div>
+      <footer className={s.footer}>
+        <div className={s.details}>
+          <div className={s.detail_item}>
+            <Calendar size={16} />
+            <span>Published on {dateFormat(uploaded_date)}</span>
+          </div>
+          <div className={s.detail_item}>
+            <Info size={16} />
+            <span>Free to use under the BT-Gallery License</span>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 };
 
-export default Image;
+export default ImageModalContent;

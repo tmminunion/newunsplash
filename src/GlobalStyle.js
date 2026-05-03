@@ -1,102 +1,104 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-  body {
-font-size:18px;
-    font-family: Open-Sans, Helvetica, Sans-Serif;
+  :root {
+    --primary: #fbbf24;
+    --primary-hover: #f59e0b;
+    --bg-main: #0f172a;
+    --bg-surface: #1e293b;
+    --bg-glass: rgba(15, 23, 42, 0.75);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
- a:link { text-decoration: none; }
-a:visited { text-decoration: none; }
-a:hover { text-decoration: none; }
-a:active { text-decoration: none; }
 
-.footer-area {
-    position: relative;
-    z-index: 1;
-    background-color: #021c3c;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-.footer-area .single-footer-widget {
-    position: relative;
-    z-index: 1;
-}
+  body {
+    font-size: 16px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
 
-.footer-area .single-footer-widget .widget-title {
-    font-size: 18px;
-    color: #ffbb38;
-    margin-bottom: 40px;
-    font-weight: 400;
-}
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+  }
 
-.footer-area .single-footer-widget ul li a {
-    display: block;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 400;
-    margin-bottom: 30px;
-    position: relative;
-    z-index: 1;
-    padding-left: 23px;
-}
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+  }
 
-.footer-area .single-footer-widget ul li a::before {
-    content: '';
+  /* Glassmorphism Utility */
+  .glass {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-glass);
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
     width: 8px;
-    height: 8px;
-    top: 7px;
-    left: 0;
-    border-radius: 50%;
-    background-color: #ffbb38;
-    position: absolute;
-    z-index: 1;
-}
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-main);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--bg-surface);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
 
-.footer-area .single-footer-widget ul li a:hover,
-.footer-area .single-footer-widget ul li a:focus {
-    color: #ffbb38;
-}
-
-.footer-area .single-footer-widget ul li:last-child a {
-    margin-bottom: 0;
-}
-
-.footer-area .copywrite-area {
+  .footer-area {
     position: relative;
     z-index: 1;
-    border-top: 1px solid #3c4450;
+    background-color: #020617;
+    padding: 60px 0 0;
+  }
+
+  .footer-area .single-footer-widget .widget-title {
+    font-size: 20px;
+    color: var(--primary);
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+
+  .footer-area .single-footer-widget ul li a {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-bottom: 20px;
+    padding-left: 0;
+    transition: color 0.2s;
+  }
+
+  .footer-area .single-footer-widget ul li a:hover {
+    color: var(--primary);
+  }
+
+  .footer-area .copywrite-area {
+    border-top: 1px solid var(--border-glass);
     padding: 30px 0;
-}
-
-.footer-area .copywrite-area .copywrite-text {
+    margin-top: 50px;
+    text-align: center;
+    color: var(--text-secondary);
     font-size: 14px;
-    margin-bottom: 0;
-    color: #636b75;
-    font-weight: 400;
-}
-
-@media only screen and (max-width: 767px) {
-    .footer-area .copywrite-area .copywrite-text {
-        margin-top: 30px;
-    }
-}
-
-@media only screen and (min-width: 480px) and (max-width: 767px) {
-    .footer-area .copywrite-area .copywrite-text {
-        margin-top: 0;
-    }
-}
-
-.footer-area .copywrite-area .copywrite-text a {
-    color: #636b75;
-    font-size: 14px;
-    font-weight: 400;
-}
-
-.footer-area .copywrite-area .copywrite-text a:hover,
-.footer-area .copywrite-area .copywrite-text a:focus {
-    color: #ffbb38;
-}
-
+  }
 `;
 
 export default GlobalStyle;

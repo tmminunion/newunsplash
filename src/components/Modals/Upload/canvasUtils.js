@@ -91,13 +91,12 @@ export async function getCroppedImg(
   // As Base64 string
   // return canvas.toDataURL('image/jpeg');
 
-  var namanya = localStorage.getItem("namatit");
-  if (!namanya) {
-    var nameimage = "photo";
-    console.log("poto");
-  } else {
-    var nameimage = namanya;
+  let nameimage = "photo";
+  const namanya = localStorage.getItem("namatit");
+  if (namanya) {
+    nameimage = namanya;
   }
+
 
   const base64 = canvas.toDataURL("image/jpeg");
   const idnya = estring(20);

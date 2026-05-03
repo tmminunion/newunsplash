@@ -1,13 +1,9 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { 
   Upload, 
-  Crop, 
-  RotateCcw, 
   ZoomIn, 
-  Image as ImageIcon, 
   Check, 
-  X, 
   Loader2,
   Maximize
 } from "lucide-react";

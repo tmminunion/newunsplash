@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { motion, AnimatePresence } from "framer-motion";
-import { Download, Calendar, User as UserIcon, Maximize2, Minimize2, Heart, Share2, Info } from "lucide-react";
+import { Download, Calendar, Maximize2, Minimize2, Heart, Share2, Info } from "lucide-react";
+
 import clsx from "clsx";
 import s from "./styles.module.scss";
 

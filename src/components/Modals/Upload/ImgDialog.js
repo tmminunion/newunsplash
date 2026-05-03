@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, Loader2, Image as ImageIcon } from "lucide-react";
+import { X, Loader2, Image as ImageIcon } from "lucide-react";
 import styled from "styled-components";
 
 const Overlay = styled(motion.div)`
